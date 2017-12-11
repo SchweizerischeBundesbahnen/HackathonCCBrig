@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------------
-A simple echo bot for the Microsoft Bot Framework. 
+A simple echo bot for the Microsoft Bot Framework.
 -----------------------------------------------------------------------------*/
 
 var restify = require('restify');
@@ -29,14 +29,12 @@ server.post('/api/messages', connector.listen());
 * ---------------------------------------------------------------------------------------- */
 
 // Create your bot with a function to receive messages from the user
-var bot = new builder.UniversalBot(connector, function (session) {
-    session.send('Sorry, I did not understand \'%s\'. Type \'help\' if you need assistance.', session.message.text);
-});
+var bot = new builder.UniversalBot(connector);
 
 // Make sure you add code to validate these fields
 var luisAppId = process.env.LuisAppId;
 var luisAPIKey = process.env.LuisAPIKey;
-var luisAPIHostName = process.env.LuisAPIHostName || 'westus.api.cognitive.microsoft.com';
+var luisAPIHostName = process.env.LuisAPIHostName || 'westeurope.api.cognitive.microsoft.com';
 
 const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v1/application?id=' + luisAppId + '&subscription-key=' + luisAPIKey;
 
@@ -44,18 +42,45 @@ const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v1/application?id=' +
 var recognizer = new builder.LuisRecognizer(LuisModelUrl);
 bot.recognizer(recognizer);
 
-bot.dialog('ZahlungsMittelDialog', function (session, args) {
-    session.endDialog('It\'s just blabla to me');
+bot.dialog('ZahlungsMittelHinterlegenDialog', function (session, args) {
+    session.endDialog('Account.Zahlungsmittel-hinterlegen');
 }).triggerAction({
-    matches: 'ZahlungsMittel'
+    matches: 'Account.Zahlungsmittel-hinterlegen'
+});
+
+bot.dialog('SpesenQuittungDialog', function (session, args) {
+    session.endDialog('Account.Spesenquittung');
+}).triggerAction({
+    matches: 'Account.Spesenquittung'
+});
+
+bot.dialog('KontoGesperrtDialog', function (session, args) {
+    session.endDialog('Account.Gesperrt');
+}).triggerAction({
+    matches: 'Account.Gesperrt'
 });
 
 
 bot.dialog('HelloDialog', function (session) {
     session.endDialog('Hello to you too!');
 }).triggerAction({
-    matches: 'Greetings'
+    matches: 'Greetings.Hello'
 });
+
+
+bot.dialog('ByeDialog', function (session) {
+    session.endDialog('Byeeee!');
+}).triggerAction({
+    matches: 'Greetings.Bye'
+});
+
+
+bot.dialog('SmallTalkDialog', function (session) {
+    session.endDialog('I\'m super good, as always! Thanks for asking...');
+}).triggerAction({
+    matches: 'Greetings.SmallTalk'
+});
+
 
 
 bot.dialog('HelpDialog', function (session) {
@@ -64,3 +89,9 @@ bot.dialog('HelpDialog', function (session) {
     matches: 'Help'
 });
 
+
+bot.dialog('NoneDialog', function (session) {
+    session.endDialog('Sorry, I did not understand \'%s\'. Type \'help\' if you need assistance.', session.message.text);
+}).triggerAction({
+    matches: 'None'
+});
