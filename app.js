@@ -39,22 +39,23 @@ var luisAPIKey = process.env.LuisAPIKey;
 var luisAPIHostName = process.env.LuisAPIHostName || 'westeurope.api.cognitive.microsoft.com';
 
 const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v1/application?id=' + luisAppId + '&subscription-key=' + luisAPIKey;
+// const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v2.0/apps/' + luisAppId + '&subscription-key=' + luisAPIKey;
 
 // Main dialog with LUIS
-var recognizer = new builder.LuisRecognizer(LuisModelUrl);
-bot.recognizer(recognizer);
+var LuisRecogniser = new builder.LuisRecognizer(LuisModelUrl);
 
+bot.recognizer(LuisRecogniser);
 
 
 //Zahlungsmittel Hinterlegen
-var zahlungsMittelDialogs = require('./flow-zahlungsmittel');
+var zahlungsMittelDialogs = require('./flow-account-zahlungsmittel');
 bot.dialog('ZahlungsMittelHinterlegenDialog', zahlungsMittelDialogs).triggerAction({
     matches: 'Account.Zahlungsmittel-hinterlegen'
 });
 
 
 //Spesequittung
-var speseQuittungDialogs = require('./flow-spesequittung');
+var speseQuittungDialogs = require('./flow-account-spesequittung');
 bot.dialog('SpesenQuittungDialog', speseQuittungDialogs).triggerAction({
     matches: 'Account.Spesenquittung'
 });

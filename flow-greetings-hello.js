@@ -1,8 +1,10 @@
 
+var i18n = require('./localisation').hello;
+
 dialogs = [
 
     function (session, args) {
-        session.endDialog('Hello to you too!');
+        session.endDialog(i18n.__('Hello :-)'));
     },
 
 ];

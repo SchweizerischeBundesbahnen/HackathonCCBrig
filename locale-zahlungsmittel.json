@@ -1,0 +1,36 @@
+{
+  "Which medium?": {
+    "en": "On which medium do you want to do it?",
+    "de": "Auf welchem ... möchten Sie das sehen?"
+  },
+  "Web/Desktop": {
+    "de": "Desktop (WebShop)"
+  },
+  "Web/Mobile": {
+    "de": "Mobile (WebShop)"
+  },
+  "SBB App": {
+    "de": "SBB Mobile App"
+  },
+  "zahlungsmittel-login.desktop.text": {
+    "de": "Login in your account"
+  },
+  "zahlungsmittel-youraccount.desktop.title": {
+    "de": "Benutzerkonto"
+  },
+  "zahlungsmittel-youraccount.desktop.text": {
+    "de": "Navigate to your account"
+  },
+  "zahlungsmittel-zahlung.desktop.title": {
+    "de": "Select Zahlung"
+  },
+  "zahlungsmittel-zahlung.desktop.text": {
+    "de": "Select the Zahlung option from the menu"
+  },
+  "zahlungsmittel-hinlegen.desktop.title": {
+    "de": "Credit card"
+  },
+  "zahlungsmittel-hinlegen.desktop.text": {
+    "de": "Provide all required information about the payment method"
+  }
+}
