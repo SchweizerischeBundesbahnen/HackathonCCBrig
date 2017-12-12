@@ -1,6 +1,8 @@
-/*-----------------------------------------------------------------------------
-A simple echo bot for the Microsoft Bot Framework.
------------------------------------------------------------------------------*/
+/*
+-----------------------------------------------------------------------------
+The best bot ever serving for SBB CC-Brig
+-----------------------------------------------------------------------------
+*/
 
 var restify = require('restify');
 var builder = require('botbuilder');
@@ -42,56 +44,58 @@ const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v1/application?id=' +
 var recognizer = new builder.LuisRecognizer(LuisModelUrl);
 bot.recognizer(recognizer);
 
-bot.dialog('ZahlungsMittelHinterlegenDialog', function (session, args) {
-    session.endDialog('Account.Zahlungsmittel-hinterlegen');
-}).triggerAction({
+
+
+//Zahlungsmittel Hinterlegen
+var zahlungsMittelDialogs = require('./flow-zahlungsmittel');
+bot.dialog('ZahlungsMittelHinterlegenDialog', zahlungsMittelDialogs).triggerAction({
     matches: 'Account.Zahlungsmittel-hinterlegen'
 });
 
-bot.dialog('SpesenQuittungDialog', function (session, args) {
-    session.endDialog('Account.Spesenquittung');
-}).triggerAction({
+
+//Spesequittung
+var speseQuittungDialogs = require('./flow-spesequittung');
+bot.dialog('SpesenQuittungDialog', speseQuittungDialogs).triggerAction({
     matches: 'Account.Spesenquittung'
 });
 
-bot.dialog('KontoGesperrtDialog', function (session, args) {
-    session.endDialog('Account.Gesperrt');
-}).triggerAction({
+
+//Account gesperrt
+var accountGesperrtDialogs = require('./flow-account-gesperrt');
+bot.dialog('KontoGesperrtDialog', accountGesperrtDialogs).triggerAction({
     matches: 'Account.Gesperrt'
 });
 
 
-bot.dialog('HelloDialog', function (session) {
-    session.endDialog('Hello to you too!');
-}).triggerAction({
+//Hello
+var greetingsHelloDialogs = require('./flow-greetings-hello');
+bot.dialog('HelloDialog', greetingsHelloDialogs).triggerAction({
     matches: 'Greetings.Hello'
 });
 
-
-bot.dialog('ByeDialog', function (session) {
-    session.endDialog('Byeeee!');
-}).triggerAction({
+//Bye
+var greetingsByeDialogs = require('./flow-greetings-bye');
+bot.dialog('ByeDialog', greetingsByeDialogs).triggerAction({
     matches: 'Greetings.Bye'
 });
 
 
-bot.dialog('SmallTalkDialog', function (session) {
-    session.endDialog('I\'m super good, as always! Thanks for asking...');
-}).triggerAction({
+//SmallTalk
+var greetingsSmallTalkDialogs = require('./flow-greetings-smalltalk');
+bot.dialog('SmallTalkDialog', greetingsSmallTalkDialogs).triggerAction({
     matches: 'Greetings.SmallTalk'
 });
 
 
-
-bot.dialog('HelpDialog', function (session) {
-    session.endDialog('This is the help dialog');
-}).triggerAction({
+//Help
+var helpDialogs = require('./flow-help');
+bot.dialog('HelpDialog', helpDialogs).triggerAction({
     matches: 'Help'
 });
 
 
-bot.dialog('NoneDialog', function (session) {
-    session.endDialog('Sorry, I did not understand \'%s\'. Type \'help\' if you need assistance.', session.message.text);
-}).triggerAction({
+//I didn't get that
+var noneIntentDialogs = require('./flow-none');
+bot.dialog('NoneDialog', noneIntentDialogs).triggerAction({
     matches: 'None'
 });
