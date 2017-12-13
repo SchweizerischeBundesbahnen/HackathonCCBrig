@@ -1,5 +1,6 @@
 var builder = require('botbuilder');
 var i18n = require('./localisation');
+var utils = require('./utils');
 
 dialogs = [
 
@@ -35,7 +36,7 @@ dialogs = [
 
             session.send(reply);
 
-            //TODO: feedback
+            utils.triggerFeedbackDialog(session);
 
             session.endDialog();
         } else {
@@ -43,7 +44,6 @@ dialogs = [
                 resumed: builder.ResumeReason.notCompleted
             });
         }
-        session.beginDialog('FeedbackDialog')
     },
 
 ];
