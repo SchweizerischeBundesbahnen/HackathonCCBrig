@@ -10,10 +10,10 @@
 
 
   "are-you-sure": {
-    "de": "Bist du dir sicher?"
+    "de": "Sind sie sich sicher?"
   },
   "cancelled": {
-    "de": "Ich habe deine Anfrage abgebrochen."
+    "de": "Ich habe ihre Anfrage abgebrochen."
   },
 
 
@@ -21,46 +21,46 @@
     "de": "Hallo, ich bin CONDI."
   },
   "bot-introduction": {
-    "de": "Hallo, mein Name ist CONDI. Ich bin der Chatbot des Contact Center Brig und kann dir in folgenden Belangen helfen.\nAccount entsperren, Zahlungsmittel hinterlegen und Spesenquittungen suchen.\nWie kann ich dir heute helfen?"
+    "de": "Hallo, mein Name ist CONDI. Ich bin der Chatbot des Contact Center Brig und kann ihnen in folgenden Belangen helfen.\nAccount entsperren, Zahlungsmittel hinterlegen und Spesenquittungen suchen.\n\nIch bin noch ziemlich jung und muss noch viel lernen. Wie kann ich ihnen heute helfen?"
   },
 
 
 
   "auth-error": {
-    "de": "Ich konnte dich mit den gemachten Angaben leider nicht identifizieren. Bitte ruf unser Contact Center an, damit wir dir weiterhelfen können."
+    "de": "Ich konnte sie mit den gemachten Angaben leider nicht identifizieren. Bitte rufen sie unser Contact Center an, da haben wir kompetente Leute, die ihnen sehr gerne weiterhelfen."
   },
   "auth-success": {
-    "de": "In dem Fall bist du #{{userFullName}}?"
+    "de": "In dem Fall sind sie #{{userFullName}}?"
   },
   "auth-necessary": {
-    "de": "Damit ich dir weiterhelfen kann, benötige ich ein paar Informationen von dir, damit ich dich identifizieren kann."
+    "de": "Damit ich ihnen weiterhelfen kann, benötige ich ein paar Informationen von ihnen, damit ich sie identifizieren kann."
   },
   "swisspass-id": {
-    "de": "Könntest du mir bitte deine SwissPass-Nr geben?"
+    "de": "Könnten sie mir bitte ihre SwissPass-Nr geben?"
   },
   "swisspass-id-explanation": {
-    "de": "Du findest deine SwissPass-Nr auf der Vorderseite deiner Karte. \nDie Nummer hat das folgende Format: XXX-XXX-XXX-X"
+    "de": "Sie finden ihre SwissPass-Nr auf der Vorderseite ihrer Karte. \nDie Nummer hat das folgende Format: XXX-XXX-XXX-X"
   },
   "email-address": {
-    "de": "Wie lautet deine E-Mailadresse?"
+    "de": "Wie lautet ihre E-Mailadresse?"
   },
   "take-a-selfie": {
-    "de": "Please provide your picture"
+    "de": "Bitte machen sie ein Bild von sich (Selfie)."
   },
   "successfully-authenticated": {
-    "de": "Hello {{name}}, your authentication procedure is successfully completed!"
+    "de": "Hallo {{name}}, ihre Identifikation hat geklappt!"
   },
 
   "account-reactivated": {
-    "de": "Ok, ich habe deinen Account entsperrt. Ich habe dir ein E-Mail mit Instruktionen für die Zurücksetzung deines Passworts an {{email}} geschickt."
+    "de": "Ok, ich habe ihren Account entsperrt. Ich habe ihnen ein E-Mail mit Instruktionen für die Zurücksetzung ihres Passworts an {{email}} geschickt."
   },
 
 
   "travel-date": {
-    "de": "Von welchem Datum möchtest du die Quittung?"
+    "de": "Von welchem Datum möchten sie die Quittung?"
   },
   "searching-receipts": {
-    "de": "Searching for receipts on date {{date}} for SwissPass #{{card}}"
+    "de": "Ich suche nach ihren Quittungen für das folgende Datum {{date}} und den SwissPass {{card}}"
   },
   "download": {
     "de": "Quittung herunterladen"
@@ -72,7 +72,7 @@
     "de": "Bestellnummer #{{text}}"
   },
   "no-results": {
-    "de": "No quittung found, please select a different travel date"
+    "de": "Keine Quittung gefunden, bitte wählen sie ein anderes Reisedatum."
   },
 
 
@@ -80,10 +80,10 @@
 
   "medium-selection": {
     "en": "On which medium do you want to do it?",
-    "de": "Auf welchem Gerät möchtest du die Einstellung vornehmen?"
+    "de": "Auf welchem Gerät möchten sie die Einstellung vornehmen?"
   },
   "desktop": {
-    "de": "auf meinem Desktopcomputer/Notebook (WebShop)"
+    "de": "auf dem Desktopcomputer/Notebook (WebShop)"
   },
   "sbb-app": {
     "de": "in der SBB Mobile App"
@@ -121,7 +121,7 @@
 
 
   "feedback-question": {
-    "de": "Are you very satisfied with the result?"
+    "de": "Konnte ich ihr Problem lösen?"
   },
   "yes": {
     "de": "Ja"
@@ -130,16 +130,16 @@
     "de": "Nein"
   },
   "thank-you": {
-    "de": "Thank you!"
+    "de": "Vielen Dank!"
   },
   "can-i-help-you-more": {
-    "de": "Can I help you with something else?"
+    "de": "Kann ich ihnen mit etwas anderem helfen?"
   },
   "text-no-1": {
-    "de": "I'm very sorry that I wasn't able to answer your question. I am still learning, and will use the record of our interaction to improve my skills in the future."
+    "de": "Es tut mir leid, dass ich leider keine Antwort gefunden habe. Wie bereits gesagt, ich lerne noch fleissig."
   },
   "text-no-2": {
-    "de": "Please call our Rail Service at [0900 300 300](tel:+41900300300)."
+    "de": "Bitte rufen sie unser Contact Center unter [0900 300 300](tel:+41900300300) an."
   }
 
 }
