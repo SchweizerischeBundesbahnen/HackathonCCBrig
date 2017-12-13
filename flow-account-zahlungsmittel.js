@@ -6,7 +6,7 @@ dialogs = [
 
     function (session, results, next) {
         session.dialogData.medium = {};
-        builder.Prompts.choice(session, i18n.__('Which medium?'), [i18n.__('Web/Desktop'), i18n.__('SBB App')], {listStyle: builder.ListStyle.button});
+        builder.Prompts.choice(session, i18n.__('medium-selection'), [i18n.__('desktop'), i18n.__('sbb-app')], {listStyle: builder.ListStyle.button});
     },
 
     function (session, results, next) {
@@ -23,9 +23,10 @@ dialogs = [
         if (session.dialogData.medium) {
 
             var cards = null;
-            if(session.dialogData.medium === 'Desktop (WebShop)') {
+            if(session.dialogData.medium === 'auf meinem Desktopcomputer/Notebook (WebShop)') {
                 cards = getCardsWebDesktop(session);
             } else {
+                session.send(i18n.__('zahlungsmittel-video.mobile.intro'));
                 cards = getCardsMobileApp(session);
             }
 
@@ -83,14 +84,12 @@ function getCardsWebDesktop(session) {
 
 function getCardsMobileApp(session) {
     return [
-
         new builder.VideoCard(session)
             .title(i18n.__('zahlungsmittel-video.mobile.title'))
             .text(i18n.__('zahlungsmittel-video.mobile.text'))
             .media([
                 { url: 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/sbb-kreditkarte-iphone.mp4' }
             ])
-
     ];
 }
 

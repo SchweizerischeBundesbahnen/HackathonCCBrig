@@ -20,7 +20,6 @@
   "bot-hello": {
     "de": "Hallo, ich bin Robochatto Botto."
   },
-
   "bot-introduction": {
     "de": "Hallo, mein Name ist Robochatto Botto. Ich bin der Chatbot des Contact Center Brig und kann dir in folgenden Belangen helfen.\nAccount entsperren, Zahlungsmittel hinterlegen und Spesenquittungen suchen.\nWie kann ich dir heute helfen?"
   },
@@ -45,7 +44,6 @@
   "email-address": {
     "de": "Wie lautet deine E-Mailadresse?"
   },
-
   "take-a-selfie": {
     "de": "Please provide your picture"
   },
@@ -71,22 +69,22 @@
   "receipt-text": {
     "de": "Bestellnummer #{{text}}"
   },
+  "no-results": {
+    "de": "No quittung found, please select a different travel date"
+  },
 
 
 
 
-  "Which medium?": {
+  "medium-selection": {
     "en": "On which medium do you want to do it?",
     "de": "Auf welchem Gerät möchtest du die Einstellung vornehmen?"
   },
-  "Web/Desktop": {
+  "desktop": {
     "de": "auf meinem Desktopcomputer/Notebook (WebShop)"
   },
-  "SBB App": {
+  "sbb-app": {
     "de": "in der SBB Mobile App"
-  },
-  "Shortfilm.Introduction": {
-    "de": "Als Hilfestellung kannst du dir diesen Kurzfilm ansehen."
   },
   "zahlungsmittel-login.desktop.text": {
     "de": "Loggen Sie sich in Ihr Konto ein"
@@ -109,10 +107,37 @@
   "zahlungsmittel-hinlegen.desktop.text": {
     "de": "Wählen Sie den Kreditkartentyp und tragen sie die notwendigen Informationen ein"
   },
+  "zahlungsmittel-video.mobile.intro": {
+    "de": "Als Hilfestellung kannst du dir diesen Kurzfilm ansehen."
+  },
   "zahlungsmittel-video.mobile.title": {
     "de": "Zahlungsmittel"
   },
   "zahlungsmittel-video.mobile.text": {
     "de": "Hiermit können Sie einen Zahlungsmittel im SBB-App hinzufügen"
+  },
+
+
+  "feedback-question": {
+    "de": "Are you very satisfied with the result?"
+  },
+  "yes": {
+    "de": "Ja"
+  },
+  "no": {
+    "de": "Nein"
+  },
+  "thank-you": {
+    "de": "Thank you!"
+  },
+  "can-i-help-you-more": {
+    "de": "Can I help you with something else?"
+  },
+  "text-no-1": {
+    "de": "I'm very sorry that I wasn't able to answer your question. I am still learning, and will use the record of our interaction to improve my skills in the future."
+  },
+  "text-no-2": {
+    "de": "Please call our Rail Service at [0900 300 300](tel:+41900300300)."
   }
+
 }

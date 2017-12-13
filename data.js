@@ -1,16 +1,16 @@
 var customers = {
     '111-222-333-1': {
-        name: "",
+        name: 'John Smith',
         email: 'john@example.com',
         faceImageUrl: ''
     },
     '111-222-333-2': {
-        name: "",
+        name: 'Markus Müller',
         email: 'markus@example.com',
         faceImageUrl: ''
     },
     '111-222-333-3': {
-        name: "",
+        name: 'Bill Doors',
         email: 'bill@example.com',
         faceImageUrl: ''
     },

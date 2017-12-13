@@ -1,5 +1,6 @@
 var builder = require('botbuilder');
 var i18n = require('./localisation');
+var utils = require('./utils');
 
 dialogs = [
 
@@ -26,6 +27,7 @@ dialogs = [
     function (session, args) {
         var securityContext = session.conversationData.securityContext;
         session.send(i18n.__("account-reactivated", {email: securityContext.emailAddress}));
+        utils.triggerFeedbackDialog(session);
         session.endDialog();
     },
 

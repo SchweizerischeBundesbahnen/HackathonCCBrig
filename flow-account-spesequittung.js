@@ -1,7 +1,7 @@
 var builder = require('botbuilder');
 var i18n = require('./localisation');
 var dateFormat = require('dateformat');
-
+var utils = require('./utils');
 var receipts = require('./data').receipts;
 
 dialogs = [
@@ -11,14 +11,8 @@ dialogs = [
     },
 
     function (session, args) {
-        //Travel time
-        builder.Prompts.time(session, i18n.__("travel-date"));
-    },
 
-    function (session, args, next) {
-
-        var securityContext = session.conversationData.securityContext;
-
+        //Initialise the data
         if(!session.dialogData.travelInfo) {
             session.dialogData.travelInfo = {
                 travelDate: null,
@@ -27,7 +21,13 @@ dialogs = [
             }
         }
 
+        //Travel time
+        builder.Prompts.time(session, i18n.__("travel-date"));
+    },
 
+    function (session, args, next) {
+
+        var securityContext = session.conversationData.securityContext;
         var travelInfo = session.dialogData.travelInfo;
 
         if(args.response) {
@@ -48,9 +48,10 @@ dialogs = [
         if(cards.length > 0) {
             // create reply with Carousel AttachmentLayout
             session.send(new builder.Message(session).attachmentLayout(builder.AttachmentLayout.carousel).attachments(cards));
+            utils.triggerFeedbackDialog(session);
             session.endDialog();
         } else {
-            session.send('No quittung found, please select a different travel date');
+            session.send(i18n.__("no-results"));
             session.replaceDialog('SpesenQuittungDialog')
         }
     }
