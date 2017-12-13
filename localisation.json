@@ -10,7 +10,7 @@
 
 
   "no-matches": {
-    "de": "I don't understand your question :-(\nI am still learning, therefore please try Account entsperren, Zahlungsmittel hinterlegen und Spesenquittungen suchen."
+    "de": "Ich verstehe sie leider nicht.\nIch bin immer noch am lernen. Was ich aktuell kann ist: Account entsperren, Zahlungsmittel hinterlegen und Spesenquittungen suchen."
   },
 
 
@@ -84,7 +84,6 @@
 
 
   "medium-selection": {
-    "en": "On which medium do you want to do it?",
     "de": "Auf welchem Gerät möchten sie die Einstellung vornehmen?"
   },
   "desktop": {
