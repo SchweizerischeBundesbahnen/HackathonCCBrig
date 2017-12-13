@@ -7,6 +7,8 @@ The best bot ever serving for SBB CC-Brig
 var restify = require('restify');
 var builder = require('botbuilder');
 
+var cognitiveservices = require('botbuilder-cognitiveservices');
+
 // Setup Restify Server
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
@@ -39,12 +41,30 @@ var luisAppId = process.env.LuisAppId;
 var luisAPIKey = process.env.LuisAPIKey;
 var luisAPIHostName = process.env.LuisAPIHostName || 'westeurope.api.cognitive.microsoft.com';
 
+var qnaKnowledgeBaseId = process.env.QnAKnowledgeBaseId;
+var qnaSubscriptionKey = process.env.QnASubscriptionKey;
+
+
 const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v2.0/apps/' + luisAppId + '?subscription-key=' + luisAPIKey;
 
 // Main dialog with LUIS
 var LuisRecogniser = new builder.LuisRecognizer(LuisModelUrl);
-
 bot.recognizer(LuisRecogniser);
+
+
+var qnarecognizer = new cognitiveservices.QnAMakerRecognizer({
+    knowledgeBaseId: qnaKnowledgeBaseId,
+    subscriptionKey: qnaSubscriptionKey,
+    top: 4});
+
+var basicQnAMakerDialog = new cognitiveservices.QnAMakerDialog({
+    recognizers: [qnarecognizer],
+    defaultMessage: 'No match! Try changing the query terms!',
+    qnaThreshold: 0.3
+});
+
+
+
 
 
 
