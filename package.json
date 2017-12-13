@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "azure-storage": "^0.5.0",
     "botbuilder": "^3.8.4",
     "botbuilder-cognitiveservices": "^1.1.0",
     "dateformat": "^3.0.2",

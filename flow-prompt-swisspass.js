@@ -93,13 +93,47 @@ function faceRecognition(session, onFileImageUrl) {
     var detectUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false';
     var key = "aacf0863280c4da4be31aff303c2cbed";
 
+
+    var azure = require('azure-storage');
+    var retryOperations = new azure.ExponentialRetryPolicyFilter();
+    var blobSvc = azure.createBlobService().withFilter(retryOperations);
+
+    var uploadContainer = "uploads";
+
+    var http = require('http');
+
+    const uuidv4 = require('uuid/v4');
+    var uploadBlob = uuidv4(); // random name
+
+    var requestData = {
+        url: imgUrl
+    };
+    request(imgUrl, function (error, response, body) {
+        blobSvc.createBlockBlobFromText(uploadContainer, uploadBlob, body, function(error, result, response){});
+        
+        var startDate = new Date();
+        var expiryDate = new Date(startDate);
+        expiryDate.setMinutes(startDate.getMinutes() + 100);
+        startDate.setMinutes(startDate.getMinutes() - 100);
+        
+        var sharedAccessPolicy = {
+            AccessPolicy: {
+            Permissions: azure.BlobUtilities.SharedAccessPermissions.READ,
+            Start: startDate,
+            Expiry: expiryDate
+        },
+    };
+
+    var blob_sas = blobSvc.generateSharedAccessSignature(uploadContainer, uploadBlob, sharedAccessPolicy);
+    var blob_sas_url = blobSvc.host.primaryHost + uploadContainer + '/' + uploadBlob + '?' + blob_sas;
+
     //First detect faces on images
     var requestData = {
         url: detectUrl,
         encoding: 'binary',
         method : 'POST',
         headers: { 'content-type': 'application/octet-stream', 'Ocp-Apim-Subscription-Key': key },
-        form: {'url': imgUrl }
+        form: {'url': blob_sas_url }
     };
 
     request(requestData, function (error, response, body) {
