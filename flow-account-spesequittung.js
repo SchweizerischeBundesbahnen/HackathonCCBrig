@@ -1,43 +1,26 @@
 var builder = require('botbuilder');
 var i18n = require('./localisation').spesenquittung;
+var dateFormat = require('dateformat');
 
 
 dialogs = [
 
-    function (session, args, next) {
-
-        var intent = args.intent;
-
-        var swissPassCardNumber = builder.EntityRecognizer.findEntity(intent.entities, 'SwissPassNumberEntity');
+    function (session) {
 
         var params = session.dialogData.params = {
-            swissPassCardNumber: swissPassCardNumber ? swissPassCardNumber.entity.toString() : null,
-            travelDate         : null,
-            travelFrom         : null,
-            travelTo           : null
+            swissCardNumber: null
         };
 
-        // Prompt for SwissPass Card Number
-        if (!params.swissPassCardNumber) {
-            builder.Prompts.text(session, i18n.__("swisspass-id"));
-            var url = 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/swisspassCardWithNumber.png';
-            sendInternetUrl(session, url, i18n.__("swisspass-id-explanation"), 'image/png', 'SwissPass.png');
-        } else {
-            next();
-        }
-
+        session.beginDialog("SwissPassCardNumberPrompt");
     },
 
-    function (session, args, next) {
-
+    function (session, args) {
         var params = session.dialogData.params;
 
         if(args.response) {
-            //var swissCardNumber = builder.EntityRecognizer.findEntity(args.intent.entities, 'SwissPassNumberEntity');
-            params.swissPassCardNumber = args.response;
+            params.swissCardNumber = args.response;
+            session.send(`Your SwissCard ${params.swissCardNumber}`);
         }
-
-        session.send(`Your input ${params.swissPassCardNumber}`);
 
         builder.Prompts.time(session, i18n.__("travel-date"));
 
@@ -51,7 +34,9 @@ dialogs = [
             params.travelDate = builder.EntityRecognizer.resolveTime([args.response]);
         }
 
-        session.send(`Your input ${params.travelDate}`);
+        var date = new Date(params.travelDate);
+
+        session.send(`Your input ${params.swissCardNumber}, ${dateFormat(date, "dddd, mmmm dS, yyyy")}`);
 
         next();
 
@@ -75,65 +60,25 @@ dialogs = [
 ];
 
 
-
-// Sends attachment using an Internet url
-function sendInternetUrl(session, url, text, contentType, attachmentFileName) {
-    var msg = new builder.Message(session)
-        .text(text)
-        .addAttachment({
-            contentUrl: url,
-            contentType: contentType,
-            name: attachmentFileName
-        });
-
-    session.send(msg);
-}
-
-
-
 function getQuittungenCarousel(session) {
-    return [
-        new builder.ThumbnailCard(session)
-            .title('BotFramework Thumbnail Card')
-            .subtitle('Your bots — wherever your users are talking')
-            .text('Build and connect intelligent bots to interact with your users naturally wherever they are, from text/sms to Skype, Slack, Office 365 mail and other popular services.')
-            .images([
-                builder.CardImage.create(session, 'https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg')
-            ])
-            .buttons([
-                builder.CardAction.openUrl(session, 'https://docs.microsoft.com/bot-framework/', 'Get Started')
-            ]),
-        new builder.ThumbnailCard(session)
-            .title('BotFramework Thumbnail Card')
-            .subtitle('Your bots — wherever your users are talking')
-            .text('Build and connect intelligent bots to interact with your users naturally wherever they are, from text/sms to Skype, Slack, Office 365 mail and other popular services.')
-            .images([
-                builder.CardImage.create(session, 'https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg')
-            ])
-            .buttons([
-                builder.CardAction.openUrl(session, 'https://docs.microsoft.com/bot-framework/', 'Get Started')
-            ]),
-        new builder.ThumbnailCard(session)
-            .title('BotFramework Thumbnail Card')
-            .subtitle('Your bots — wherever your users are talking')
-            .text('Build and connect intelligent bots to interact with your users naturally wherever they are, from text/sms to Skype, Slack, Office 365 mail and other popular services.')
-            .images([
-                builder.CardImage.create(session, 'https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg')
-            ])
-            .buttons([
-                builder.CardAction.openUrl(session, 'https://docs.microsoft.com/bot-framework/', 'Get Started')
-            ]),
-        new builder.ThumbnailCard(session)
-            .title('BotFramework Thumbnail Card')
-            .subtitle('Your bots — wherever your users are talking')
-            .text('Build and connect intelligent bots to interact with your users naturally wherever they are, from text/sms to Skype, Slack, Office 365 mail and other popular services.')
-            .images([
-                builder.CardImage.create(session, 'https://sec.ch9.ms/ch9/7ff5/e07cfef0-aa3b-40bb-9baa-7c9ef8ff7ff5/buildreactionbotframework_960.jpg')
-            ])
-            .buttons([
-                builder.CardAction.openUrl(session, 'https://docs.microsoft.com/bot-framework/', 'Get Started')
-            ])
-    ];
+
+    var cards = [];
+
+    for (i = 0; i < 5; i++) {
+        cards.push(
+            new builder.HeroCard(session)
+                .title(i18n.__("quittung-title", { id: i+1 }))
+                .text(i18n.__("quittung-text", { text: `abc-123-${i}` }))
+                .images([
+                    builder.CardImage.create(session, 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/Quittung-Thumbnail.png')
+                ])
+                .buttons([
+                    builder.CardAction.openUrl(session, '#', i18n.__("download"))
+                ])
+        );
+    }
+
+    return cards;
 }
 
 

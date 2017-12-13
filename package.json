@@ -6,7 +6,8 @@
   "dependencies": {
     "botbuilder": "^3.8.4",
     "restify": "^5.0.0",
-    "i18n-nodejs": "^3.0.0"
+    "i18n-nodejs": "^3.0.0",
+    "dateformat": "^3.0.2"
   },
   "devDependencies": {
     "request": "^2.81.0",

@@ -1,16 +1,23 @@
 {
 
-  "swisspass-id": {
-    "de": "Tell me your SwissPass Card number"
-  },
-
-  "swisspass-id-explanation": {
-    "de": "Your SwissCard number is shown on the front of your SwissCard, as shown below:"
-  },
-
   "travel-date": {
     "de": "Which was your travel date?"
+  },
+
+
+  "download": {
+    "de": "Quittung herunterladen"
+  },
+
+
+  "quittung-title": {
+    "de": "Quittung #{{id}}"
+  },
+
+  "quittung-text": {
+    "de": "Bestellnummer #{{text}}"
   }
+
 
 
 }

@@ -24,14 +24,15 @@ var connector = new builder.ChatConnector({
 // Listen for messages from users 
 server.post('/api/messages', connector.listen());
 
-/*----------------------------------------------------------------------------------------
-* Bot Storage: This is a great spot to register the private state storage for your bot. 
-* We provide adapters for Azure Table, CosmosDb, SQL Azure, or you can implement your own!
-* For samples and documentation, see: https://github.com/Microsoft/BotBuilder-Azure
-* ---------------------------------------------------------------------------------------- */
+
+//Storage
+var inMemoryStorage = new builder.MemoryBotStorage();
+
 
 // Create your bot with a function to receive messages from the user
 var bot = new builder.UniversalBot(connector);
+bot.set('storage', inMemoryStorage);
+
 
 // Make sure you add code to validate these fields
 var luisAppId = process.env.LuisAppId;
@@ -39,7 +40,6 @@ var luisAPIKey = process.env.LuisAPIKey;
 var luisAPIHostName = process.env.LuisAPIHostName || 'westeurope.api.cognitive.microsoft.com';
 
 const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v1/application?id=' + luisAppId + '&subscription-key=' + luisAPIKey;
-// const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v2.0/apps/' + luisAppId + '&subscription-key=' + luisAPIKey;
 
 // Main dialog with LUIS
 var LuisRecogniser = new builder.LuisRecognizer(LuisModelUrl);
@@ -100,3 +100,7 @@ var noneIntentDialogs = require('./flow-none');
 bot.dialog('NoneDialog', noneIntentDialogs).triggerAction({
     matches: 'None'
 });
+
+
+var swissPassCardNumberDialogs = require('./flow-prompt-swisspass');
+bot.dialog('SwissPassCardNumberPrompt', swissPassCardNumberDialogs);

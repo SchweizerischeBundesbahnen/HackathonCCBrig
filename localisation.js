@@ -10,3 +10,5 @@ var config = {
 module.exports.hello = new i18n_module("de", "./../../locale-greetings.json");
 module.exports.zahlungsmittel = new i18n_module("de", "./../../locale-zahlungsmittel.json");
 module.exports.spesenquittung = new i18n_module("de", "./../../locale-spesenquittung.json");
+module.exports.gesperrt = new i18n_module("de", "./../../locale-gesperrt.json");
+module.exports.security = new i18n_module("de", "./../../locale-security.json");

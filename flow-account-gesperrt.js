@@ -1,3 +1,5 @@
+var builder = require('botbuilder');
+var i18n = require('./localisation').gesperrt;
 
 dialogs = [
 
