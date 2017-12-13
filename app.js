@@ -39,7 +39,7 @@ var luisAppId = process.env.LuisAppId;
 var luisAPIKey = process.env.LuisAPIKey;
 var luisAPIHostName = process.env.LuisAPIHostName || 'westeurope.api.cognitive.microsoft.com';
 
-const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v1/application?id=' + luisAppId + '&subscription-key=' + luisAPIKey;
+const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v2.0/apps/' + luisAppId + '?subscription-key=' + luisAPIKey;
 
 // Main dialog with LUIS
 var LuisRecogniser = new builder.LuisRecognizer(LuisModelUrl);
@@ -56,7 +56,8 @@ bot.dialog('ZahlungsMittelHinterlegenDialog', zahlungsMittelDialogs).triggerActi
 
 //Spesequittung
 var speseQuittungDialogs = require('./flow-account-spesequittung');
-bot.dialog('SpesenQuittungDialog', speseQuittungDialogs).triggerAction({
+bot.dialog('SpesenQuittungDialog', speseQuittungDialogs)
+.triggerAction({
     matches: 'Account.Spesenquittung'
 });
 
@@ -104,3 +105,4 @@ bot.dialog('NoneDialog', noneIntentDialogs).triggerAction({
 
 var swissPassCardNumberDialogs = require('./flow-prompt-swisspass');
 bot.dialog('SwissPassCardNumberPrompt', swissPassCardNumberDialogs);
+

@@ -6,9 +6,6 @@
   "Web/Desktop": {
     "de": "Desktop (WebShop)"
   },
-  "Web/Mobile": {
-    "de": "Mobile (WebShop)"
-  },
   "SBB App": {
     "de": "SBB Mobile App"
   },
@@ -32,5 +29,11 @@
   },
   "zahlungsmittel-hinlegen.desktop.text": {
     "de": "Provide all required information about the payment method"
+  },
+  "zahlungsmittel-video.mobile.title": {
+    "de": "Add payment"
+  },
+  "zahlungsmittel-video.mobile.text": {
+    "de": "This is how you add a payment method on the SBB App"
   }
 }
