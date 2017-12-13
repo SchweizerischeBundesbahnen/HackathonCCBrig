@@ -55,13 +55,16 @@
   "travel-date": {
     "de": "Von welchem Datum möchtest du die Quittung?"
   },
+  "searching-receipts": {
+    "de": "Searching for receipts on date {{date}} for SwissPass #{{card}}"
+  },
   "download": {
     "de": "Quittung herunterladen"
   },
-  "quittung-title": {
+  "receipt-title": {
     "de": "Quittung #{{id}}"
   },
-  "quittung-text": {
+  "receipt-text": {
     "de": "Bestellnummer #{{text}}"
   },
 
