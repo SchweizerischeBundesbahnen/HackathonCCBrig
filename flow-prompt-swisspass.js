@@ -4,6 +4,10 @@ var utils = require('./utils');
 var customers = require('./data').customers;
 var azure = require('azure-storage');
 
+var detectUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false';
+var cognitiveVisionKey = process.env.CognitiveVisionKey;
+var request = require('request').defaults({ encoding: null });
+
 
 dialogs = [
 
@@ -70,7 +74,10 @@ dialogs = [
 
         var securityContext = session.conversationData.securityContext;
 
-        var matches = true;//faceRecognition(session, securityContext.faceImageUrl);
+        var matches = faceRecognition(session, securityContext.faceImageUrl, function(body){
+session.send(body);
+}
+);
 
         if(matches) {
             session.conversationData.securityContext.authenticated = true;
@@ -86,7 +93,7 @@ dialogs = [
 ];
 
 
-function faceDetection(blobSvc, container, blob) {
+function faceDetection(blobSvc, container, blob, callback) {
             var startDate = new Date();
             var expiryDate = new Date(startDate);
             expiryDate.setMinutes(startDate.getMinutes() + 100);
@@ -111,29 +118,33 @@ function faceDetection(blobSvc, container, blob) {
                 json: {'url': blob_sas_url }
             };
     
-            var faceId = request(requestData, function (error, response, body) {
+            request(requestData, function (error, response, body) {
                 if (!error && response.statusCode == 200) {
                     // Print out the response body
+                    console.log("success");
                     console.log(body);
-                    session.send("toto");
+                    console.log("parse");
+                    console.log("successful");
+                    if (body) {
+                        callback(body[0].faceId)
+                    } else {
+                        console.log("no face found");
+                    } 
                 } else {
+                    console.log("failure");
                     console.log(response);
                     console.log(error);
                 }
     
             });
-console.log(faceId);
 }
 
 
-function faceRecognition(session, onFileImageUrl) {
+function faceRecognition(session, onFileImageUrl, callback) {
 
     var imgUrl = session.message.attachments[0].contentUrl;
     session.send("I received your image " + imgUrl);
 
-    var request = require('request').defaults({ encoding: null });
-    var detectUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false';
-    var cognitiveVisionKey = process.env.CognitiveVisionKey;
 
     var azure = require('azure-storage');
     var retryOperations = new azure.ExponentialRetryPolicyFilter();
@@ -152,13 +163,15 @@ function faceRecognition(session, onFileImageUrl) {
     request(imgUrl, function (error, response, body) {
         blobSvc.createBlockBlobFromText(uploadContainer, uploadBlob, body, function(error, result, response) {
         
-            faceId = faceDetection(blobSvc, uploadContainer, uploadBlob)
+            faceDetection(blobSvc, uploadContainer, uploadBlob, function(body) {
+			    callback(body)
+		})
     
             //Then verify if images are similar
             //var verifyUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0';*/
     
             return true;
-});
+        });
     });
 }
 
