@@ -2,6 +2,7 @@ var builder = require('botbuilder');
 var i18n = require('./localisation');
 var utils = require('./utils');
 var customers = require('./data').customers;
+var azure = require('azure-storage');
 
 
 dialogs = [
@@ -69,7 +70,7 @@ dialogs = [
 
         var securityContext = session.conversationData.securityContext;
 
-        var matches = faceRecognition(session, securityContext.faceImageUrl);
+        var matches = true;//faceRecognition(session, securityContext.faceImageUrl);
 
         if(matches) {
             session.conversationData.securityContext.authenticated = true;
@@ -85,7 +86,7 @@ dialogs = [
 ];
 
 
-function faceDetection(container, blob) {
+function faceDetection(blobSvc, container, blob) {
             var startDate = new Date();
             var expiryDate = new Date(startDate);
             expiryDate.setMinutes(startDate.getMinutes() + 100);
@@ -151,7 +152,7 @@ function faceRecognition(session, onFileImageUrl) {
     request(imgUrl, function (error, response, body) {
         blobSvc.createBlockBlobFromText(uploadContainer, uploadBlob, body, function(error, result, response) {
         
-            faceId = faceDetection(uploadContainer, uploadBlob)
+            faceId = faceDetection(blobSvc, uploadContainer, uploadBlob)
     
             //Then verify if images are similar
             //var verifyUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0';*/
