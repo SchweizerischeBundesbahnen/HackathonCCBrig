@@ -1,5 +1,5 @@
 var builder = require('botbuilder');
-var i18n = require('./localisation').spesenquittung;
+var i18n = require('./localisation');
 var dateFormat = require('dateformat');
 
 

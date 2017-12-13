@@ -1,6 +1,7 @@
 var builder = require('botbuilder');
-var i18n = require('./localisation').security;
+var i18n = require('./localisation');
 var utils = require('./utils');
+var customers = require('./data').customers;
 
 
 dialogs = [
@@ -11,6 +12,7 @@ dialogs = [
             //This is the first conversation (new session)
             session.conversationData.securityContext = {
                 swissPassCardNumber: null,
+                emailAddress: null,
                 authenticated: false
             }
         }
@@ -35,10 +37,16 @@ dialogs = [
     function (session, results) {
         var matched = results.response.match(/\d{3}-\d{3}-\d{3}-\d{1}/g);
         var number = matched ? matched.join('') : '';
+
         if (number) {
-            session.conversationData.securityContext.swissPassCardNumber = number;
-            session.conversationData.securityContext.authenticated = true;
-            session.endDialogWithResult({response: number});
+            if(customers[number] != null) {
+                session.conversationData.securityContext.authenticated = true;
+                session.conversationData.securityContext.swissPassCardNumber = number;
+                session.conversationData.securityContext.emailAddress = customers[number];
+                session.endDialogWithResult({response: number});
+            } else {
+                session.endConversation(i18n.__("auth-error"));
+            }
         } else {
             // Repeat the dialog
             session.replaceDialog('SwissPassCardNumberPrompt', {reprompt: true});

@@ -1,5 +1,5 @@
 var builder = require('botbuilder');
-var i18n = require('./localisation').gesperrt;
+var i18n = require('./localisation');
 
 dialogs = [
 
@@ -7,9 +7,26 @@ dialogs = [
         session.beginDialog("SwissPassCardNumberPrompt");
     },
 
+    function (session, args, next) {
+        builder.Prompts.text(session, i18n.__("email-address"));
+    },
+
+    function (session, args, next) {
+
+        var securityContext = session.conversationData.securityContext;
+
+        if (args.response && args.response === securityContext.emailAddress) {
+            next();
+        } else {
+            session.endConversation(i18n.__("auth-error"));
+        }
+
+    },
 
     function (session, args) {
-        session.endDialog('Account.Gesperrt');
+        var securityContext = session.conversationData.securityContext;
+        session.send(i18n.__("account-reactivated", {email: securityContext.emailAddress}));
+        session.endDialog();
     },
 
 ];
