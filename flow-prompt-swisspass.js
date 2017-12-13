@@ -69,7 +69,7 @@ dialogs = [
 
         var securityContext = session.conversationData.securityContext;
 
-        var matches = true;//faceRecognition(session, securityContext.faceImageUrl);
+        var matches = faceRecognition(session, securityContext.faceImageUrl);
 
         if(matches) {
             session.conversationData.securityContext.authenticated = true;

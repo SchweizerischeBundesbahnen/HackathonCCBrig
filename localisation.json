@@ -9,6 +9,11 @@
   },
 
 
+  "no-matches": {
+    "de": "I don't understand your question :-(\nI am still learning, therefore please try Account entsperren, Zahlungsmittel hinterlegen und Spesenquittungen suchen."
+  },
+
+
   "are-you-sure": {
     "de": "Sind sie sich sicher?"
   },

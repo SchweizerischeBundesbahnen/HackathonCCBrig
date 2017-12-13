@@ -52,6 +52,9 @@ var LuisRecogniser = new builder.LuisRecognizer(LuisModelUrl);
 bot.recognizer(LuisRecogniser);
 
 
+var i18n = require('./localisation');
+
+
 var qnarecognizer = new cognitiveservices.QnAMakerRecognizer({
     knowledgeBaseId: qnaKnowledgeBaseId,
     subscriptionKey: qnaSubscriptionKey,
@@ -59,13 +62,9 @@ var qnarecognizer = new cognitiveservices.QnAMakerRecognizer({
 
 var basicQnAMakerDialog = new cognitiveservices.QnAMakerDialog({
     recognizers: [qnarecognizer],
-    defaultMessage: 'No match! Try changing the query terms!',
+    defaultMessage: i18n.__('no-matches'),
     qnaThreshold: 0.3
 });
-
-
-
-var i18n = require('./localisation');
 
 
 
