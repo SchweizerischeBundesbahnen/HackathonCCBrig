@@ -93,8 +93,7 @@ function faceRecognition(session, onFileImageUrl) {
 
     var request = require('request').defaults({ encoding: null });
     var detectUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false';
-    var key = "aacf0863280c4da4be31aff303c2cbed";
-
+    var cognitiveVisionKey = process.env.CognitiveVisionKey;
 
     var azure = require('azure-storage');
     var retryOperations = new azure.ExponentialRetryPolicyFilter();
@@ -133,7 +132,7 @@ function faceRecognition(session, onFileImageUrl) {
         var requestData = {
             url: detectUrl,
             method : 'POST',
-            headers: { 'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': key },
+            headers: { 'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': cognitiveVisionKey },
             form: {'url': blob_sas_url }
         };
 
