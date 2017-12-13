@@ -46,6 +46,10 @@
     "de": "Wie lautet deine E-Mailadresse?"
   },
 
+  "take-a-selfie": {
+    "de": "Please provide your picture"
+  },
+
 
   "account-reactivated": {
     "de": "Ok, ich habe deinen Account entsperrt. Ich habe dir ein E-Mail mit Instruktionen für die Zurücksetzung deines Passworts an {{email}} geschickt."
