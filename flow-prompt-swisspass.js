@@ -133,7 +133,7 @@ function faceRecognition(session, onFileImageUrl) {
             url: detectUrl,
             method : 'POST',
             headers: { 'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': cognitiveVisionKey },
-            form: {'url': blob_sas_url }
+            json: {'url': blob_sas_url }
         };
 
         request(requestData, function (error, response, body) {
