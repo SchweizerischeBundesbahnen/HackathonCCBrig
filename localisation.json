@@ -1,4 +1,59 @@
 {
+  "welcome": {
+    "de": "Willkomen",
+    "fr": "Bienvenue"
+  },
+
+  "bye-bye": {
+    "de": "Tschüss"
+  },
+
+
+  "are-you-sure": {
+    "de": "Are you sure?"
+  },
+  "cancelled": {
+    "de": "Your request was cancelled."
+  },
+
+
+
+
+  "auth-error": {
+    "de": "Your identity cannot be verified."
+  },
+  "swisspass-id": {
+    "de": "Tell me your SwissPass Card number"
+  },
+  "swisspass-id-explanation": {
+    "de": "Your SwissCard number is shown on the front of your SwissCard, as shown below.\nIt must be in the following format: XXX-XXX-XXX-X"
+  },
+  "email-address": {
+    "de": "Your email address please"
+  },
+
+
+  "account-reactivated": {
+    "de": "We reactivated your account and send you an email for reset your password at {{email}}."
+  },
+
+
+  "travel-date": {
+    "de": "Which was your travel date?"
+  },
+  "download": {
+    "de": "Quittung herunterladen"
+  },
+  "quittung-title": {
+    "de": "Quittung #{{id}}"
+  },
+  "quittung-text": {
+    "de": "Bestellnummer #{{text}}"
+  },
+
+
+
+
   "Which medium?": {
     "en": "On which medium do you want to do it?",
     "de": "Auf welchem Gerät möchten Sie das sehen?"

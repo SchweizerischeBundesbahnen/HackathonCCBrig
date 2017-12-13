@@ -65,7 +65,7 @@ var basicQnAMakerDialog = new cognitiveservices.QnAMakerDialog({
 
 
 
-var i18n = require('./localisation').generic;
+var i18n = require('./localisation');
 
 
 

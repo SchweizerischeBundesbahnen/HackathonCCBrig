@@ -7,9 +7,4 @@ var config = {
     "langFile": "./../../locale-greetings.json"//relative path to index.js file of i18n-nodejs module
 };
 
-module.exports.hello = new i18n_module("de", "./../../locale-greetings.json");
-module.exports.zahlungsmittel = new i18n_module("de", "./../../locale-zahlungsmittel.json");
-module.exports.spesenquittung = new i18n_module("de", "./../../locale-spesenquittung.json");
-module.exports.gesperrt = new i18n_module("de", "./../../locale-gesperrt.json");
-module.exports.security = new i18n_module("de", "./../../locale-security.json");
-module.exports.generic = new i18n_module("de", "./../../locale-generic.json");
+module.exports = new i18n_module("de", "./../../localisation.json");

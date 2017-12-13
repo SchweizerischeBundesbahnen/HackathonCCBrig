@@ -1,5 +1,5 @@
-
-var i18n = require('./localisation').hello;
+var builder = require('botbuilder');
+var i18n = require('./localisation');
 
 dialogs = [
 
