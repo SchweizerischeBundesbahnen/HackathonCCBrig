@@ -19,7 +19,6 @@ dialogs = [
             session.conversationData.securityContext = {
                 swissPassCardNumber: null,
                 emailAddress: null,
-                faceImageUrl: null,
                 authenticated: false
             }
         }
@@ -51,7 +50,6 @@ dialogs = [
             if(customers[number] != null) {
                 securityContext.swissPassCardNumber = number;
                 securityContext.emailAddress = customers[number].email;
-                securityContext.faceImageUrl = customers[number].faceImageUrl;
                 securityContext.name = customers[number].name;
                 next();
             } else {
@@ -75,18 +73,17 @@ dialogs = [
 
         var securityContext = session.conversationData.securityContext;
 
-        var matches = faceRecognition(session, securityContext.faceImageUrl, function(isIdentical) {
-            session.send("Result: " + isIdentical);
-        }
-        );
-
-        if(matches) {
+        faceRecognition(session, securityContext.swissPassCardNumber, function(faceFound, isIdentical) {
+        if (!faceFound) {
+            session.endConversation(i18n.__("no-face-found"));
+        } else if (isIdentical) {
             session.conversationData.securityContext.authenticated = true;
             session.send(i18n.__('successfully-authenticated', {name: securityContext.name}));
             session.endDialog();
         } else {
             session.endConversation(i18n.__("auth-error"));
         }
+    })
 
     }
 
@@ -94,95 +91,95 @@ dialogs = [
 ];
 
 
-function faceDetection(blobSvc, container, blob, callback) {
-            var startDate = new Date();
-            var expiryDate = new Date(startDate);
-            expiryDate.setMinutes(startDate.getMinutes() + 100);
-            startDate.setMinutes(startDate.getMinutes() - 100);
-            
-            var sharedAccessPolicy = {
-                AccessPolicy: {
-                    Permissions: azure.BlobUtilities.SharedAccessPermissions.READ,
-                    Start: startDate,
-                    Expiry: expiryDate
-                },
-            };
+function faceDetectionOnBlob(blobSvc, container, blob, callback) {
+
+    // Generate a Storage Access Signature (SAS) to create a temporary URL allowing the 
+    // cognitive service to access the image on Blob storage.
+
+    var startDate = new Date();
+    var expiryDate = new Date(startDate);
+    expiryDate.setMinutes(startDate.getMinutes() + 100);
+    startDate.setMinutes(startDate.getMinutes() - 100);
     
-            var blob_sas = blobSvc.generateSharedAccessSignature(container, blob, sharedAccessPolicy);
-            var blob_sas_url = blobSvc.host.primaryHost + container + '/' + blob + '?' + blob_sas;
-    
-            //First detect faces on images
-            var requestData = {
-                url: detectUrl,
-                method : 'POST',
-                headers: { 'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': cognitiveVisionKey },
-                json: {'url': blob_sas_url }
-            };
-    
-            request(requestData, function (error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    // Print out the response body
-                    console.log("success");
-                    console.log(body);
-                    console.log("parse");
-                    console.log("successful");
-                    if (body) {
-                        callback(body[0].faceId)
-                    } else {
-                        console.log("no face found");
-                    } 
-                } else {
-                    console.log("failure");
-                    console.log(response);
-                    console.log(error);
-                }
-    
-            });
+    var sharedAccessPolicy = {
+        AccessPolicy: {
+            Permissions: azure.BlobUtilities.SharedAccessPermissions.READ,
+            Start: startDate,
+            Expiry: expiryDate
+        },
+    };
+
+    var blob_sas = blobSvc.generateSharedAccessSignature(container, blob, sharedAccessPolicy);
+    var blob_sas_url = blobSvc.host.primaryHost + container + '/' + blob + '?' + blob_sas;
+
+    // Call face detection
+
+    faceDetectionOnUrl(blob_sas_url, callback);
+}
+
+function faceDetectionOnUrl(blob_sas_url, callback) {
+
+    var requestData = {
+        url: detectUrl,
+        method : 'POST',
+        headers: { 'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': cognitiveVisionKey },
+        json: {'url': blob_sas_url }
+    };
+
+    request(requestData, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            if (body && body[0]) {
+                callback(true, body[0].faceId)
+            } else {
+                callback(false)
+            } 
+        } else {
+            console.log("failure");
+            console.log(response);
+            console.log(error);
+        }
+    });
 }
 
     
 
 function faceVerification(faceId1, faceId2, callback) {
-    
-            var requestData = {
-                url: verifyUrl,
-                method : 'POST',
-                headers: { 'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': cognitiveVisionKey },
-                json: {'faceId1': faceId1, 'faceId2': faceId1 }
-            };
-    
-            request(requestData, function (error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    // Print out the response body
-                    console.log("successverif");
-                    console.log(body);
-                    if (body) {
-                        callback(body.isIdentical)
-                    } else {
-                        console.log("no face found");
-                    } 
-                } else {
-                    console.log("failure");
-                    console.log(response);
-                    console.log(error);
-                }
-    
-            });
+    var requestData = {
+        url: verifyUrl,
+        method : 'POST',
+        headers: { 'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': cognitiveVisionKey },
+        json: {'faceId1': faceId1, 'faceId2': faceId2 }
+    };
+
+    request(requestData, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            // Print out the response body
+            if (body) {
+                callback(body.isIdentical)
+            } else {
+                console.log("error");
+            } 
+        } else {
+            console.log("failure");
+            console.log(response);
+            console.log(error);
+        }
+
+    });
 }
     
 
 
-function faceRecognition(session, onFileImageUrl, callback) {
+function faceRecognition(session, swissPassCardNumber, callback) {
 
     var imgUrl = session.message.attachments[0].contentUrl;
-    session.send("I received your image " + imgUrl);
-
 
     var azure = require('azure-storage');
     var retryOperations = new azure.ExponentialRetryPolicyFilter();
     var blobSvc = azure.createBlobService().withFilter(retryOperations);
 
     var uploadContainer = "uploads";
+    var swissPassImgContainer = "sbbdb";
 
     var http = require('http');
 
@@ -195,10 +192,15 @@ function faceRecognition(session, onFileImageUrl, callback) {
     request(imgUrl, function (error, response, body) {
         blobSvc.createBlockBlobFromText(uploadContainer, uploadBlob, body, function(error, result, response) {
         
-            faceDetection(blobSvc, uploadContainer, uploadBlob, function(faceId1) {
-            	faceDetection(blobSvc, uploadContainer, uploadBlob, function(faceId2) {
-            	    faceVerification(faceId1, faceId2, function(result) {
-			    callback(result)
+            faceDetectionOnBlob(blobSvc, uploadContainer, uploadBlob, function(faceFound1, faceId1) {
+            	if (!faceFound1) {
+            	    callback(false)
+            	    return
+		}
+
+            	faceDetectionOnBlob(blobSvc, swissPassImgContainer, swissPassCardNumber + ".jpg", function(faceFound2, faceId2) {
+            	    faceVerification(faceId1, faceId2, function(isIdentical) {
+			    callback(true, isIdentical)
 		    })
 		})
             })

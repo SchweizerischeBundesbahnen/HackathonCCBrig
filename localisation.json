@@ -40,6 +40,9 @@
   "auth-necessary": {
     "de": "Damit ich ihnen weiterhelfen kann, benötige ich ein paar Informationen von ihnen, damit ich sie identifizieren kann."
   },
+  "no-face-found": {
+    "de": "Es wurde kein Gesicht auf dem Bild erkannt."
+  },
   "swisspass-id": {
     "de": "Könnten sie mir bitte ihre SwissPass-Nr geben?"
   },

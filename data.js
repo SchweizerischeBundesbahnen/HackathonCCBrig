@@ -1,28 +1,23 @@
 var customers = {
     '111-222-333-1': {
         name: 'Hans Huggentobler',
-        email: 'hans@example.com',
-        faceImageUrl: ''
+        email: 'hans@example.com'
     },
     '111-222-333-2': {
         name: 'Markus Müller',
-        email: 'markus@example.com',
-        faceImageUrl: ''
+        email: 'markus@example.com'
     },
     '111-222-333-3': {
         name: 'Bernhard Knüsel',
-        email: 'bernhard@example.com',
-        faceImageUrl: ''
+        email: 'bernhard@example.com'
     },
     '111-222-333-4': {
         name: 'Daniela Huber',
-        email: 'daniela@example.com',
-        faceImageUrl: ''
+        email: 'daniela@example.com'
     },
     '111-222-333-5': {
         name: 'Samantha Fischer',
-        email: 'samantha@example.com',
-        faceImageUrl: ''
+        email: 'samantha@example.com'
     },
 };
 
