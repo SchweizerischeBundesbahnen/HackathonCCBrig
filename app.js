@@ -134,8 +134,7 @@ bot.dialog('ByeDialog', greetingsByeDialogs)
 // });
 
 
-//I didn't get that
-var noneIntentDialogs = require('./flow-none');
+//I didn't get that, redirect to QnA Maker
 bot.dialog('/', basicQnAMakerDialog);
 
 
