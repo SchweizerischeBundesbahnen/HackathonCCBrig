@@ -13,5 +13,12 @@ function sendInternetUrl(session, url, text, contentType, attachmentFileName) {
     session.send(msg);
 }
 
+function triggerFeedbackDialog(session) {
+    setTimeout(function() {
+        session.beginDialog('FeedbackDialog')
+    }, 3000);
+}
+
 
 module.exports.sendAttachmentUrl = sendInternetUrl;
+module.exports.triggerFeedbackDialog = triggerFeedbackDialog;

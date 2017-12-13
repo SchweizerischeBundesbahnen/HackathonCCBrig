@@ -100,6 +100,9 @@ bot.dialog('KontoGesperrtDialog', accountGesperrtDialogs)
     confirmPrompt: i18n.__("are-you-sure")
 });
 
+//Leave feedback
+var feedbackDialogs = require('./flow-account-feedback');
+bot.dialog('FeedbackDialog', feedbackDialogs);
 
 //Hello
 var greetingsHelloDialogs = require('./flow-greetings-hello');
