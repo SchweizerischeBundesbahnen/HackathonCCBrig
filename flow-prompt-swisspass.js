@@ -118,40 +118,40 @@ function faceRecognition(session, onFileImageUrl) {
         
         var sharedAccessPolicy = {
             AccessPolicy: {
-            Permissions: azure.BlobUtilities.SharedAccessPermissions.READ,
-            Start: startDate,
-            Expiry: expiryDate
-        },
-    };
+                Permissions: azure.BlobUtilities.SharedAccessPermissions.READ,
+                Start: startDate,
+                Expiry: expiryDate
+            },
+        };
 
-    var blob_sas = blobSvc.generateSharedAccessSignature(uploadContainer, uploadBlob, sharedAccessPolicy);
-    var blob_sas_url = blobSvc.host.primaryHost + uploadContainer + '/' + uploadBlob + '?' + blob_sas;
+        var blob_sas = blobSvc.generateSharedAccessSignature(uploadContainer, uploadBlob, sharedAccessPolicy);
+        var blob_sas_url = blobSvc.host.primaryHost + uploadContainer + '/' + uploadBlob + '?' + blob_sas;
 
-    //First detect faces on images
-    var requestData = {
-        url: detectUrl,
-        encoding: 'binary',
-        method : 'POST',
-        headers: { 'content-type': 'application/octet-stream', 'Ocp-Apim-Subscription-Key': key },
-        form: {'url': blob_sas_url }
-    };
+        //First detect faces on images
+        var requestData = {
+            url: detectUrl,
+            method : 'POST',
+            headers: { 'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': key },
+            form: {'url': blob_sas_url }
+        };
 
-    request(requestData, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            // Print out the response body
-            console.log(body);
-            session.send("toto");
-        } else {
-            console.log(response);
-            console.log(error);
-        }
+        request(requestData, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                // Print out the response body
+                console.log(body);
+                session.send("toto");
+            } else {
+                console.log(response);
+                console.log(error);
+            }
 
+        });
+
+        //Then verify if images are similar
+        //var verifyUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0';*/
+
+        return true;
     });
-
-    //Then verify if images are similar
-    //var verifyUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0';*/
-
-    return true;
 }
 
 
