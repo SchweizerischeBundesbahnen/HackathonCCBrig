@@ -85,6 +85,45 @@ dialogs = [
 ];
 
 
+function faceDetection(container, blob) {
+            var startDate = new Date();
+            var expiryDate = new Date(startDate);
+            expiryDate.setMinutes(startDate.getMinutes() + 100);
+            startDate.setMinutes(startDate.getMinutes() - 100);
+            
+            var sharedAccessPolicy = {
+                AccessPolicy: {
+                    Permissions: azure.BlobUtilities.SharedAccessPermissions.READ,
+                    Start: startDate,
+                    Expiry: expiryDate
+                },
+            };
+    
+            var blob_sas = blobSvc.generateSharedAccessSignature(container, blob, sharedAccessPolicy);
+            var blob_sas_url = blobSvc.host.primaryHost + container + '/' + blob + '?' + blob_sas;
+    
+            //First detect faces on images
+            var requestData = {
+                url: detectUrl,
+                method : 'POST',
+                headers: { 'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': cognitiveVisionKey },
+                json: {'url': blob_sas_url }
+            };
+    
+            var faceId = request(requestData, function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    // Print out the response body
+                    console.log(body);
+                    session.send("toto");
+                } else {
+                    console.log(response);
+                    console.log(error);
+                }
+    
+            });
+console.log(faceId);
+}
+
 
 function faceRecognition(session, onFileImageUrl) {
 
@@ -110,48 +149,15 @@ function faceRecognition(session, onFileImageUrl) {
         url: imgUrl
     };
     request(imgUrl, function (error, response, body) {
-        blobSvc.createBlockBlobFromText(uploadContainer, uploadBlob, body, function(error, result, response){});
+        blobSvc.createBlockBlobFromText(uploadContainer, uploadBlob, body, function(error, result, response) {
         
-        var startDate = new Date();
-        var expiryDate = new Date(startDate);
-        expiryDate.setMinutes(startDate.getMinutes() + 100);
-        startDate.setMinutes(startDate.getMinutes() - 100);
-        
-        var sharedAccessPolicy = {
-            AccessPolicy: {
-                Permissions: azure.BlobUtilities.SharedAccessPermissions.READ,
-                Start: startDate,
-                Expiry: expiryDate
-            },
-        };
-
-        var blob_sas = blobSvc.generateSharedAccessSignature(uploadContainer, uploadBlob, sharedAccessPolicy);
-        var blob_sas_url = blobSvc.host.primaryHost + uploadContainer + '/' + uploadBlob + '?' + blob_sas;
-
-        //First detect faces on images
-        var requestData = {
-            url: detectUrl,
-            method : 'POST',
-            headers: { 'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': cognitiveVisionKey },
-            json: {'url': blob_sas_url }
-        };
-
-        request(requestData, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                // Print out the response body
-                console.log(body);
-                session.send("toto");
-            } else {
-                console.log(response);
-                console.log(error);
-            }
-
-        });
-
-        //Then verify if images are similar
-        //var verifyUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0';*/
-
-        return true;
+            faceId = faceDetection(uploadContainer, uploadBlob)
+    
+            //Then verify if images are similar
+            //var verifyUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0';*/
+    
+            return true;
+});
     });
 }
 
