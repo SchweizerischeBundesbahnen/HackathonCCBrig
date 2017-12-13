@@ -65,9 +65,6 @@ var basicQnAMakerDialog = new cognitiveservices.QnAMakerDialog({
 
 
 
-
-
-
 var i18n = require('./localisation').generic;
 
 
@@ -75,8 +72,7 @@ var i18n = require('./localisation').generic;
 //Zahlungsmittel Hinterlegen
 var zahlungsMittelDialogs = require('./flow-account-zahlungsmittel');
 bot.dialog('ZahlungsMittelHinterlegenDialog', zahlungsMittelDialogs).triggerAction({
-    matches: 'Account.Zahlungsmittel-hinterlegen',
-    score: 0.8
+    matches: 'Account.Zahlungsmittel-hinterlegen'
 });
 
 
@@ -84,8 +80,7 @@ bot.dialog('ZahlungsMittelHinterlegenDialog', zahlungsMittelDialogs).triggerActi
 var speseQuittungDialogs = require('./flow-account-spesequittung');
 bot.dialog('SpesenQuittungDialog', speseQuittungDialogs)
 .triggerAction({
-    matches: 'Account.Spesenquittung',
-    score: 0.8
+    matches: 'Account.Spesenquittung'
 })
 .cancelAction('cancelCreateNote', i18n.__("cancelled"), {
     matches: /^(fertig|stop|cancel)/i,
@@ -121,12 +116,12 @@ bot.dialog('ByeDialog', greetingsByeDialogs)
 });
 
 
-//SmallTalk
-var greetingsSmallTalkDialogs = require('./flow-greetings-smalltalk');
-bot.dialog('SmallTalkDialog', greetingsSmallTalkDialogs)
-.triggerAction({
-    matches: 'Greetings.SmallTalk'
-});
+// //SmallTalk
+// var greetingsSmallTalkDialogs = require('./flow-greetings-smalltalk');
+// bot.dialog('SmallTalkDialog', greetingsSmallTalkDialogs)
+// .triggerAction({
+//     matches: 'Greetings.SmallTalk'
+// });
 
 
 // //Help
@@ -138,7 +133,7 @@ bot.dialog('SmallTalkDialog', greetingsSmallTalkDialogs)
 
 //I didn't get that
 var noneIntentDialogs = require('./flow-none');
-bot.dialog('/', noneIntentDialogs);
+bot.dialog('/', basicQnAMakerDialog);
 
 
 var swissPassCardNumberDialogs = require('./flow-prompt-swisspass');

@@ -6,21 +6,13 @@ var dateFormat = require('dateformat');
 dialogs = [
 
     function (session) {
-
-        var params = session.dialogData.params = {
-            swissCardNumber: null
-        };
-
         session.beginDialog("SwissPassCardNumberPrompt");
     },
 
     function (session, args) {
-        var params = session.dialogData.params;
+        var securityContext = session.conversationData.securityContext;
 
-        if(args.response) {
-            params.swissCardNumber = args.response;
-            session.send(`Your SwissCard ${params.swissCardNumber}`);
-        }
+        session.send(`Your SwissCard ${securityContext.swissPassCardNumber}`);
 
         builder.Prompts.time(session, i18n.__("travel-date"));
 
@@ -28,15 +20,16 @@ dialogs = [
 
     function (session, args, next) {
 
-        var params = session.dialogData.params;
+        var securityContext = session.conversationData.securityContext;
+        var travelDate = null;
 
         if(args.response) {
-            params.travelDate = builder.EntityRecognizer.resolveTime([args.response]);
+            travelDate = builder.EntityRecognizer.resolveTime([args.response]);
         }
 
-        var date = new Date(params.travelDate);
+        var date = new Date(travelDate);
 
-        session.send(`Your input ${params.swissCardNumber}, ${dateFormat(date, "dddd, mmmm dS, yyyy")}`);
+        session.send(`Your input ${securityContext.swissPassCardNumber}, ${dateFormat(date, "dddd, mmmm dS, yyyy")}`);
 
         next();
 
