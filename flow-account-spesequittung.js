@@ -2,6 +2,7 @@ var builder = require('botbuilder');
 var i18n = require('./localisation');
 var dateFormat = require('dateformat');
 
+var receipts = require('./data').receipts;
 
 dialogs = [
 
@@ -10,44 +11,48 @@ dialogs = [
     },
 
     function (session, args) {
-        var securityContext = session.conversationData.securityContext;
-
-        session.send(`Your SwissCard ${securityContext.swissPassCardNumber}`);
-
+        //Travel time
         builder.Prompts.time(session, i18n.__("travel-date"));
-
     },
 
     function (session, args, next) {
 
         var securityContext = session.conversationData.securityContext;
-        var travelDate = null;
 
-        if(args.response) {
-            travelDate = builder.EntityRecognizer.resolveTime([args.response]);
+        if(!session.dialogData.travelInfo) {
+            session.dialogData.travelInfo = {
+                travelDate: null,
+                travelFrom: null,
+                travelTo:   null
+            }
         }
 
-        var date = new Date(travelDate);
 
-        session.send(`Your input ${securityContext.swissPassCardNumber}, ${dateFormat(date, "dddd, mmmm dS, yyyy")}`);
+        var travelInfo = session.dialogData.travelInfo;
+
+        if(args.response) {
+            travelInfo.travelDate = builder.EntityRecognizer.resolveTime([args.response]);
+        }
+
+        var date = new Date(travelInfo.travelDate);
+        session.send(i18n.__("searching-receipts", {date: dateFormat(date, "dddd, mmmm dS, yyyy"), card: securityContext.swissPassCardNumber}));
 
         next();
-
     },
 
 
     function (session, args, next) {
 
-        var cards = getQuittungenCarousel();
+        var cards = getQuittungenCarousel(session);
 
-        // create reply with Carousel AttachmentLayout
-        var reply = new builder.Message(session)
-            .attachmentLayout(builder.AttachmentLayout.carousel)
-            .attachments(cards);
-
-        session.send(reply);
-
-        session.endDialog();
+        if(cards.length > 0) {
+            // create reply with Carousel AttachmentLayout
+            session.send(new builder.Message(session).attachmentLayout(builder.AttachmentLayout.carousel).attachments(cards));
+            session.endDialog();
+        } else {
+            session.send('No quittung found, please select a different travel date');
+            session.replaceDialog('SpesenQuittungDialog')
+        }
     }
 
 ];
@@ -55,20 +60,28 @@ dialogs = [
 
 function getQuittungenCarousel(session) {
 
+    var securityContext = session.conversationData.securityContext;
+    var travelInfo = session.dialogData.travelInfo;
+    var date = dateFormat(new Date(travelInfo.travelDate), "yyyy-mm-dd");
+
     var cards = [];
 
-    for (i = 0; i < 5; i++) {
-        cards.push(
-            new builder.HeroCard(session)
-                .title(i18n.__("quittung-title", { id: i+1 }))
-                .text(i18n.__("quittung-text", { text: `abc-123-${i}` }))
-                .images([
-                    builder.CardImage.create(session, 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/Quittung-Thumbnail.png')
-                ])
-                .buttons([
-                    builder.CardAction.openUrl(session, '#', i18n.__("download"))
-                ])
-        );
+    if(receipts[securityContext.swissPassCardNumber] && receipts[securityContext.swissPassCardNumber][date]) {
+        var myReceipts = receipts[securityContext.swissPassCardNumber][date];
+
+        for (var i = 0; i < myReceipts.length; i++) {
+            cards.push(
+                new builder.HeroCard(session)
+                    .title(i18n.__("receipt-title", { id: i+1 }))
+                    .text(i18n.__("receipt-text", { text: myReceipts[i] }))
+                    .images([
+                        builder.CardImage.create(session, 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/Quittung-Thumbnail.png')
+                    ])
+                    .buttons([
+                        builder.CardAction.openUrl(session, '#', i18n.__("download"))
+                    ])
+            );
+        }
     }
 
     return cards;
