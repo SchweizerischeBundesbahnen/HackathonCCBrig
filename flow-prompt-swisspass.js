@@ -7,7 +7,8 @@ var azure = require('azure-storage');
 var detectUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false';
 var verifyUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0/verify';
 var cognitiveVisionKey = process.env.CognitiveVisionKey;
-var request = require('request').defaults({ encoding: null });
+
+var request = require('request').defaults({encoding: null});
 
 
 dialogs = [
@@ -47,7 +48,7 @@ dialogs = [
         var number = matched ? matched.join('') : '';
 
         if (number) {
-            if(customers[number] != null) {
+            if (customers[number] != null) {
                 securityContext.swissPassCardNumber = number;
                 securityContext.emailAddress = customers[number].email;
                 securityContext.name = customers[number].name;
@@ -73,17 +74,17 @@ dialogs = [
 
         var securityContext = session.conversationData.securityContext;
 
-        faceRecognition(session, securityContext.swissPassCardNumber, function(faceFound, isIdentical) {
-        if (!faceFound) {
-            session.endConversation(i18n.__("no-face-found"));
-        } else if (isIdentical) {
-            session.conversationData.securityContext.authenticated = true;
-            session.send(i18n.__('successfully-authenticated', {name: securityContext.name}));
-            session.endDialog();
-        } else {
-            session.endConversation(i18n.__("auth-error"));
-        }
-    })
+        faceRecognition(session, securityContext.swissPassCardNumber, function (faceFound, isIdentical) {
+            if (!faceFound) {
+                session.endConversation(i18n.__("no-face-found"));
+            } else if (isIdentical) {
+                session.conversationData.securityContext.authenticated = true;
+                session.send(i18n.__('successfully-authenticated', {name: securityContext.name}));
+                session.endDialog();
+            } else {
+                session.endConversation(i18n.__("auth-error"));
+            }
+        })
 
     }
 
@@ -100,7 +101,7 @@ function faceDetectionOnBlob(blobSvc, container, blob, callback) {
     var expiryDate = new Date(startDate);
     expiryDate.setMinutes(startDate.getMinutes() + 100);
     startDate.setMinutes(startDate.getMinutes() - 100);
-    
+
     var sharedAccessPolicy = {
         AccessPolicy: {
             Permissions: azure.BlobUtilities.SharedAccessPermissions.READ,
@@ -121,9 +122,9 @@ function faceDetectionOnUrl(blob_sas_url, callback) {
 
     var requestData = {
         url: detectUrl,
-        method : 'POST',
-        headers: { 'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': cognitiveVisionKey },
-        json: {'url': blob_sas_url }
+        method: 'POST',
+        headers: {'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': cognitiveVisionKey},
+        json: {'url': blob_sas_url}
     };
 
     request(requestData, function (error, response, body) {
@@ -132,7 +133,7 @@ function faceDetectionOnUrl(blob_sas_url, callback) {
                 callback(true, body[0].faceId)
             } else {
                 callback(false)
-            } 
+            }
         } else {
             console.log("failure");
             console.log(response);
@@ -141,14 +142,13 @@ function faceDetectionOnUrl(blob_sas_url, callback) {
     });
 }
 
-    
 
 function faceVerification(faceId1, faceId2, callback) {
     var requestData = {
         url: verifyUrl,
-        method : 'POST',
-        headers: { 'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': cognitiveVisionKey },
-        json: {'faceId1': faceId1, 'faceId2': faceId2 }
+        method: 'POST',
+        headers: {'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': cognitiveVisionKey},
+        json: {'faceId1': faceId1, 'faceId2': faceId2}
     };
 
     request(requestData, function (error, response, body) {
@@ -158,7 +158,7 @@ function faceVerification(faceId1, faceId2, callback) {
                 callback(body.isIdentical)
             } else {
                 console.log("error");
-            } 
+            }
         } else {
             console.log("failure");
             console.log(response);
@@ -167,7 +167,6 @@ function faceVerification(faceId1, faceId2, callback) {
 
     });
 }
-    
 
 
 function faceRecognition(session, swissPassCardNumber, callback) {
@@ -190,25 +189,24 @@ function faceRecognition(session, swissPassCardNumber, callback) {
         url: imgUrl
     };
     request(imgUrl, function (error, response, body) {
-        blobSvc.createBlockBlobFromText(uploadContainer, uploadBlob, body, function(error, result, response) {
-        
-            faceDetectionOnBlob(blobSvc, uploadContainer, uploadBlob, function(faceFound1, faceId1) {
-            	if (!faceFound1) {
-            	    callback(false)
-            	    return
-		}
+        blobSvc.createBlockBlobFromText(uploadContainer, uploadBlob, body, function (error, result, response) {
 
-            	faceDetectionOnBlob(blobSvc, swissPassImgContainer, swissPassCardNumber + ".jpg", function(faceFound2, faceId2) {
-            	    faceVerification(faceId1, faceId2, function(isIdentical) {
-			    callback(true, isIdentical)
-		    })
-		})
-            })
+            faceDetectionOnBlob(blobSvc, uploadContainer, uploadBlob, function (faceFound1, faceId1) {
+                if (!faceFound1) {
+                    callback(false);
+                    return
+                }
+
+                faceDetectionOnBlob(blobSvc, swissPassImgContainer, swissPassCardNumber + ".jpg", function (faceFound2, faceId2) {
+                    faceVerification(faceId1, faceId2, function (isIdentical) {
+                        callback(true, isIdentical)
+                    })
+                })
+            });
             return true;
         });
     });
 }
-
 
 
 module.exports = dialogs;
