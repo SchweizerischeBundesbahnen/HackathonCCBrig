@@ -5,6 +5,7 @@ var customers = require('./data').customers;
 var azure = require('azure-storage');
 
 var detectUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false';
+var verifyUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0/verify';
 var cognitiveVisionKey = process.env.CognitiveVisionKey;
 var request = require('request').defaults({ encoding: null });
 
@@ -74,10 +75,10 @@ dialogs = [
 
         var securityContext = session.conversationData.securityContext;
 
-        var matches = faceRecognition(session, securityContext.faceImageUrl, function(body){
-session.send(body);
-}
-);
+        var matches = faceRecognition(session, securityContext.faceImageUrl, function(isIdentical) {
+            session.send("Result: " + isIdentical);
+        }
+        );
 
         if(matches) {
             session.conversationData.securityContext.authenticated = true;
@@ -139,6 +140,37 @@ function faceDetection(blobSvc, container, blob, callback) {
             });
 }
 
+    
+
+function faceVerification(faceId1, faceId2, callback) {
+    
+            var requestData = {
+                url: verifyUrl,
+                method : 'POST',
+                headers: { 'content-type': 'application/json', 'Ocp-Apim-Subscription-Key': cognitiveVisionKey },
+                json: {'faceId1': faceId1, 'faceId2': faceId1 }
+            };
+    
+            request(requestData, function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    // Print out the response body
+                    console.log("successverif");
+                    console.log(body);
+                    if (body) {
+                        callback(body.isIdentical)
+                    } else {
+                        console.log("no face found");
+                    } 
+                } else {
+                    console.log("failure");
+                    console.log(response);
+                    console.log(error);
+                }
+    
+            });
+}
+    
+
 
 function faceRecognition(session, onFileImageUrl, callback) {
 
@@ -163,13 +195,13 @@ function faceRecognition(session, onFileImageUrl, callback) {
     request(imgUrl, function (error, response, body) {
         blobSvc.createBlockBlobFromText(uploadContainer, uploadBlob, body, function(error, result, response) {
         
-            faceDetection(blobSvc, uploadContainer, uploadBlob, function(body) {
-			    callback(body)
+            faceDetection(blobSvc, uploadContainer, uploadBlob, function(faceId1) {
+            	faceDetection(blobSvc, uploadContainer, uploadBlob, function(faceId2) {
+            	    faceVerification(faceId1, faceId2, function(result) {
+			    callback(result)
+		    })
 		})
-    
-            //Then verify if images are similar
-            //var verifyUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0';*/
-    
+            })
             return true;
         });
     });
