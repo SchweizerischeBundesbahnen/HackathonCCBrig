@@ -7,6 +7,8 @@ The best bot ever serving for SBB CC-Brig
 var restify = require('restify');
 var builder = require('botbuilder');
 
+var cognitiveservices = require('botbuilder-cognitiveservices');
+
 // Setup Restify Server
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
@@ -39,10 +41,25 @@ var luisAppId = process.env.LuisAppId;
 var luisAPIKey = process.env.LuisAPIKey;
 var luisAPIHostName = process.env.LuisAPIHostName || 'westeurope.api.cognitive.microsoft.com';
 
+var qnaKnowledgeBaseId = process.env.QnAKnowledgeBaseId;
+var qnaSubscriptionKey = process.env.QnASubscriptionKey;
+
 const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v1/application?id=' + luisAppId + '&subscription-key=' + luisAPIKey;
 
 // Main dialog with LUIS
 var LuisRecogniser = new builder.LuisRecognizer(LuisModelUrl);
+
+var qnarecognizer = new cognitiveservices.QnAMakerRecognizer({
+    knowledgeBaseId: qnaKnowledgeBaseId,
+    subscriptionKey: qnaSubscriptionKey,
+    top: 4});
+
+var basicQnAMakerDialog = new cognitiveservices.QnAMakerDialog({
+    recognizers: [qnarecognizer],
+    defaultMessage: 'No match! Try changing the query terms!',
+    qnaThreshold: 0.3
+});
+
 
 bot.recognizer(LuisRecogniser);
 
@@ -96,10 +113,13 @@ bot.dialog('HelpDialog', helpDialogs).triggerAction({
 
 
 //I didn't get that
-var noneIntentDialogs = require('./flow-none');
-bot.dialog('NoneDialog', noneIntentDialogs).triggerAction({
+bot.dialog('NoneDialog', function (session, args) {
+    bot.dialog('/', basicQnAMakerDialog);
+}).triggerAction({
     matches: 'None'
 });
+
+
 
 
 var swissPassCardNumberDialogs = require('./flow-prompt-swisspass');
