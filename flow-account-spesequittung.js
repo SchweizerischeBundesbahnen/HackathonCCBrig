@@ -61,7 +61,7 @@ function getQuittungenCarousel(session) {
         cards.push(
             new builder.HeroCard(session)
                 .title(i18n.__("quittung-title", { id: i+1 }))
-                .text(i18n.__("quittung-text", { text: `abc-123-${i}` }))
+                .text(i18n.__("quittung-text", { text: `abc-123-${i+1}` }))
                 .images([
                     builder.CardImage.create(session, 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/Quittung-Thumbnail.png')
                 ])
