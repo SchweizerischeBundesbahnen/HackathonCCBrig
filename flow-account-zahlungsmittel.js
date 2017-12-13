@@ -43,6 +43,7 @@ dialogs = [
                 resumed: builder.ResumeReason.notCompleted
             });
         }
+        session.beginDialog('FeedbackDialog')
     },
 
 ];
