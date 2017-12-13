@@ -47,10 +47,16 @@ var LuisRecogniser = new builder.LuisRecognizer(LuisModelUrl);
 bot.recognizer(LuisRecogniser);
 
 
+
+var i18n = require('./localisation').generic;
+
+
+
 //Zahlungsmittel Hinterlegen
 var zahlungsMittelDialogs = require('./flow-account-zahlungsmittel');
 bot.dialog('ZahlungsMittelHinterlegenDialog', zahlungsMittelDialogs).triggerAction({
-    matches: 'Account.Zahlungsmittel-hinterlegen'
+    matches: 'Account.Zahlungsmittel-hinterlegen',
+    score: 0.8
 });
 
 
@@ -58,49 +64,61 @@ bot.dialog('ZahlungsMittelHinterlegenDialog', zahlungsMittelDialogs).triggerActi
 var speseQuittungDialogs = require('./flow-account-spesequittung');
 bot.dialog('SpesenQuittungDialog', speseQuittungDialogs)
 .triggerAction({
-    matches: 'Account.Spesenquittung'
+    matches: 'Account.Spesenquittung',
+    score: 0.8
+})
+.cancelAction('cancelCreateNote', i18n.__("cancelled"), {
+    matches: /^(fertig|stop|cancel)/i,
+    confirmPrompt: i18n.__("are-you-sure")
 });
 
 
 //Account gesperrt
 var accountGesperrtDialogs = require('./flow-account-gesperrt');
-bot.dialog('KontoGesperrtDialog', accountGesperrtDialogs).triggerAction({
-    matches: 'Account.Gesperrt'
+bot.dialog('KontoGesperrtDialog', accountGesperrtDialogs)
+.triggerAction({
+    matches: 'Account.Gesperrt',
+    score: 0.8
+})
+.cancelAction('cancelCreateNote', i18n.__("cancelled"), {
+    matches: /^(fertig|stop|cancel)/i,
+    confirmPrompt: i18n.__("are-you-sure")
 });
 
 
 //Hello
 var greetingsHelloDialogs = require('./flow-greetings-hello');
-bot.dialog('HelloDialog', greetingsHelloDialogs).triggerAction({
+bot.dialog('HelloDialog', greetingsHelloDialogs)
+.triggerAction({
     matches: 'Greetings.Hello'
 });
 
 //Bye
 var greetingsByeDialogs = require('./flow-greetings-bye');
-bot.dialog('ByeDialog', greetingsByeDialogs).triggerAction({
+bot.dialog('ByeDialog', greetingsByeDialogs)
+.triggerAction({
     matches: 'Greetings.Bye'
 });
 
 
 //SmallTalk
 var greetingsSmallTalkDialogs = require('./flow-greetings-smalltalk');
-bot.dialog('SmallTalkDialog', greetingsSmallTalkDialogs).triggerAction({
+bot.dialog('SmallTalkDialog', greetingsSmallTalkDialogs)
+.triggerAction({
     matches: 'Greetings.SmallTalk'
 });
 
 
-//Help
-var helpDialogs = require('./flow-help');
-bot.dialog('HelpDialog', helpDialogs).triggerAction({
-    matches: 'Help'
-});
+// //Help
+// var helpDialogs = require('./flow-help');
+// bot.dialog('HelpDialog', helpDialogs).triggerAction({
+//     matches: 'Help'
+// });
 
 
 //I didn't get that
 var noneIntentDialogs = require('./flow-none');
-bot.dialog('NoneDialog', noneIntentDialogs).triggerAction({
-    matches: 'None'
-});
+bot.dialog('/', noneIntentDialogs);
 
 
 var swissPassCardNumberDialogs = require('./flow-prompt-swisspass');
