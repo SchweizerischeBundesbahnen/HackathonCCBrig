@@ -6,9 +6,6 @@
   "Web/Desktop": {
     "de": "Desktop (WebShop)"
   },
-  "Web/Mobile": {
-    "de": "Mobile (WebShop)"
-  },
   "SBB App": {
     "de": "SBB Mobile App"
   },
@@ -32,5 +29,11 @@
   },
   "zahlungsmittel-hinlegen.desktop.text": {
     "de": "Wählen Sie den Kreditkartentyp und tragen sie die notwendigen Informationen ein"
+  },
+  "zahlungsmittel-video.mobile.title": {
+    "de": "Zahlungsmittel"
+  },
+  "zahlungsmittel-video.mobile.text": {
+    "de": "Hiermit können Sie einen Zahlungsmittel im SBB-App hinzufügen"
   }
 }

@@ -5,7 +5,7 @@ dialogs = [
 
     function (session, results, next) {
         session.dialogData.medium = {};
-        builder.Prompts.choice(session, i18n.__('Which medium?'), [i18n.__('Web/Desktop'), i18n.__('Web/Mobile'), i18n.__('SBB App')], {listStyle: builder.ListStyle.button});
+        builder.Prompts.choice(session, i18n.__('Which medium?'), [i18n.__('Web/Desktop'), i18n.__('SBB App')], {listStyle: builder.ListStyle.button});
     },
 
     function (session, results, next) {
@@ -20,9 +20,13 @@ dialogs = [
     function (session, args, next) {
 
         if (session.dialogData.medium) {
-            session.send(`You selected ${session.dialogData.medium}.`);
 
-            var cards = getCardsWebDesktop();
+            var cards = null;
+            if(session.dialogData.medium === 'Desktop (WebShop)') {
+                cards = getCardsWebDesktop(session);
+            } else {
+                cards = getCardsMobileApp(session);
+            }
 
             // create reply with Carousel AttachmentLayout
             var reply = new builder.Message(session)
@@ -75,5 +79,18 @@ function getCardsWebDesktop(session) {
     ];
 }
 
+
+function getCardsMobileApp(session) {
+    return [
+
+        new builder.VideoCard(session)
+            .title(i18n.__('zahlungsmittel-video.mobile.title'))
+            .text(i18n.__('zahlungsmittel-video.mobile.text'))
+            .media([
+                { url: 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/sbb-kreditkarte-iphone.mp4' }
+            ])
+
+    ];
+}
 
 module.exports = dialogs;

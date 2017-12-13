@@ -7,12 +7,28 @@ dialogs = [
 
     function (session, args) {
 
-        if (args && args.reprompt) {
-            var url = 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/swisspassCardWithNumber.png';
-            utils.sendAttachmentUrl(session, url, i18n.__("swisspass-id-explanation"), 'image/png', 'SwissPass.png');
-            builder.Prompts.text(session, i18n.__("swisspass-id"));
+        if (!session.conversationData.securityContext) {
+            //This is the first conversation (new session)
+            session.conversationData.securityContext = {
+                swissPassCardNumber: null,
+                authenticated: false
+            }
+        }
+
+        if (session.conversationData.securityContext.authenticated) {
+            //The user is already authenticated
+            session.endDialogWithResult({
+                response: session.conversationData.securityContext.swissPassCardNumber
+            });
         } else {
-            builder.Prompts.text(session, i18n.__("swisspass-id"));
+            //The user is not authenticated, we start the authentication procedure
+            if (args && args.reprompt) {
+                var url = 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/swisspassCardWithNumber.png';
+                utils.sendAttachmentUrl(session, url, i18n.__("swisspass-id-explanation"), 'image/png', 'SwissPass.png');
+                builder.Prompts.text(session, i18n.__("swisspass-id"));
+            } else {
+                builder.Prompts.text(session, i18n.__("swisspass-id"));
+            }
         }
     },
 
@@ -20,6 +36,8 @@ dialogs = [
         var matched = results.response.match(/\d{3}-\d{3}-\d{3}-\d{1}/g);
         var number = matched ? matched.join('') : '';
         if (number) {
+            session.conversationData.securityContext.swissPassCardNumber = number;
+            session.conversationData.securityContext.authenticated = true;
             session.endDialogWithResult({response: number});
         } else {
             // Repeat the dialog

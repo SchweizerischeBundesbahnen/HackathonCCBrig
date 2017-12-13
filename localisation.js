@@ -12,3 +12,4 @@ module.exports.zahlungsmittel = new i18n_module("de", "./../../locale-zahlungsmi
 module.exports.spesenquittung = new i18n_module("de", "./../../locale-spesenquittung.json");
 module.exports.gesperrt = new i18n_module("de", "./../../locale-gesperrt.json");
 module.exports.security = new i18n_module("de", "./../../locale-security.json");
+module.exports.generic = new i18n_module("de", "./../../locale-generic.json");
