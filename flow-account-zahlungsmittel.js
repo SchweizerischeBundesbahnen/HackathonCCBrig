@@ -54,21 +54,22 @@ function getCardsWebDesktop(session) {
             .title(i18n.__('zahlungsmittel-youraccount.desktop.title'))
             .text(i18n.__('zahlungsmittel-youraccount.desktop.text'))
             .images([
-                builder.CardImage.create(session, 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/Zahlungsmittel-1.JPG')
+                builder.CardImage.create(session, 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/Zahlungsmittel-1.png'),
+                builder.CardImage.create(session, 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/Zahlungsmittel-2.png')
             ]),
 
         new builder.HeroCard(session)
             .title(i18n.__('zahlungsmittel-zahlung.desktop.title'))
             .text(i18n.__('zahlungsmittel-zahlung.desktop.text'))
             .images([
-                builder.CardImage.create(session, 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/Zahlungsmittel-2.JPG')
+                builder.CardImage.create(session, 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/Zahlungsmittel-3.png')
             ]),
 
         new builder.HeroCard(session)
             .title(i18n.__('zahlungsmittel-hinlegen.desktop.title'))
             .text(i18n.__('zahlungsmittel-hinlegen.desktop.text'))
             .images([
-                builder.CardImage.create(session, 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/Zahlungsmittel-3.jpg')
+                builder.CardImage.create(session, 'https://sbbstorage.blob.core.windows.net/cc-brig-bot/Zahlungsmittel-4.png')
             ]),
 
     ];
