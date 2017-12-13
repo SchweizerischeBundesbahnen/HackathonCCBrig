@@ -10,36 +10,50 @@
 
 
   "are-you-sure": {
-    "de": "Are you sure?"
+    "de": "Bist du dir sicher?"
   },
   "cancelled": {
-    "de": "Your request was cancelled."
+    "de": "Ich habe deine Anfrage abgebrochen."
   },
 
+
+  "bot-hello": {
+    "de": "Hallo, ich bin Robochatto Botto."
+  },
+
+  "bot-introduction": {
+    "de": "Hallo, mein Name ist Robochatto Botto. Ich bin der Chatbot des Contact Center Brig und kann dir in folgenden Belangen helfen.\nAccount entsperren, Zahlungsmittel hinterlegen und Spesenquittungen suchen.\nWie kann ich dir heute helfen?"
+  },
 
 
 
   "auth-error": {
-    "de": "Your identity cannot be verified."
+    "de": "Ich konnte dich mit den gemachten Angaben leider nicht identifizieren. Bitte ruf unser Contact Center an, damit wir dir weiterhelfen können."
+  },
+  "auth-success": {
+    "de": "In dem Fall bist du #{{userFullName}}?"
+  },
+  "auth-necessary": {
+    "de": "Damit ich dir weiterhelfen kann, benötige ich ein paar Informationen von dir, damit ich dich identifizieren kann."
   },
   "swisspass-id": {
-    "de": "Tell me your SwissPass Card number"
+    "de": "Könntest du mir bitte deine SwissPass-Nr geben?"
   },
   "swisspass-id-explanation": {
-    "de": "Your SwissCard number is shown on the front of your SwissCard, as shown below.\nIt must be in the following format: XXX-XXX-XXX-X"
+    "de": "Du findest deine SwissPass-Nr auf der Vorderseite deiner Karte. \nDie Nummer hat das folgende Format: XXX-XXX-XXX-X"
   },
   "email-address": {
-    "de": "Your email address please"
+    "de": "Wie lautet deine E-Mailadresse?"
   },
 
 
   "account-reactivated": {
-    "de": "We reactivated your account and send you an email for reset your password at {{email}}."
+    "de": "Ok, ich habe deinen Account entsperrt. Ich habe dir ein E-Mail mit Instruktionen für die Zurücksetzung deines Passworts an {{email}} geschickt."
   },
 
 
   "travel-date": {
-    "de": "Which was your travel date?"
+    "de": "Von welchem Datum möchtest du die Quittung?"
   },
   "download": {
     "de": "Quittung herunterladen"
@@ -56,13 +70,16 @@
 
   "Which medium?": {
     "en": "On which medium do you want to do it?",
-    "de": "Auf welchem Gerät möchten Sie das sehen?"
+    "de": "Auf welchem Gerät möchtest du die Einstellung vornehmen?"
   },
   "Web/Desktop": {
-    "de": "Desktop (WebShop)"
+    "de": "auf meinem Desktopcomputer/Notebook (WebShop)"
   },
   "SBB App": {
-    "de": "SBB Mobile App"
+    "de": "in der SBB Mobile App"
+  },
+  "Shortfilm.Introduction": {
+    "de": "Als Hilfestellung kannst du dir diesen Kurzfilm ansehen."
   },
   "zahlungsmittel-login.desktop.text": {
     "de": "Loggen Sie sich in Ihr Konto ein"
