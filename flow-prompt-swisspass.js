@@ -46,6 +46,7 @@ dialogs = [
                 securityContext.swissPassCardNumber = number;
                 securityContext.emailAddress = customers[number].email;
                 securityContext.faceImageUrl = customers[number].faceImageUrl;
+                securityContext.name = customers[number].name;
                 next();
             } else {
                 session.endConversation(i18n.__("auth-error"));
@@ -72,6 +73,7 @@ dialogs = [
 
         if(matches) {
             session.conversationData.securityContext.authenticated = true;
+            session.send(i18n.__('successfully-authenticated', {name: securityContext.name}));
             session.endDialog();
         } else {
             session.endConversation(i18n.__("auth-error"));

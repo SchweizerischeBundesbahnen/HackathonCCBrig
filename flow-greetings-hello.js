@@ -4,7 +4,7 @@ var i18n = require('./localisation');
 dialogs = [
 
     function (session, args) {
-        session.endDialog(i18n.__('bot-hello'));
+        session.endDialog(i18n.__('bot-introduction'));
     },
 
 ];

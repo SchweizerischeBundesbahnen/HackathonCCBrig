@@ -18,10 +18,10 @@
 
 
   "bot-hello": {
-    "de": "Hallo, ich bin Robochatto Botto."
+    "de": "Hallo, ich bin CONDI."
   },
   "bot-introduction": {
-    "de": "Hallo, mein Name ist Robochatto Botto. Ich bin der Chatbot des Contact Center Brig und kann dir in folgenden Belangen helfen.\nAccount entsperren, Zahlungsmittel hinterlegen und Spesenquittungen suchen.\nWie kann ich dir heute helfen?"
+    "de": "Hallo, mein Name ist CONDI. Ich bin der Chatbot des Contact Center Brig und kann dir in folgenden Belangen helfen.\nAccount entsperren, Zahlungsmittel hinterlegen und Spesenquittungen suchen.\nWie kann ich dir heute helfen?"
   },
 
 
@@ -47,7 +47,9 @@
   "take-a-selfie": {
     "de": "Please provide your picture"
   },
-
+  "successfully-authenticated": {
+    "de": "Hello {{name}}, your authentication procedure is successfully completed!"
+  },
 
   "account-reactivated": {
     "de": "Ok, ich habe deinen Account entsperrt. Ich habe dir ein E-Mail mit Instruktionen für die Zurücksetzung deines Passworts an {{email}} geschickt."
