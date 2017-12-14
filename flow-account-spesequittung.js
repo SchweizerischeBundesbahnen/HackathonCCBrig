@@ -48,8 +48,8 @@ dialogs = [
         if(cards.length > 0) {
             // create reply with Carousel AttachmentLayout
             session.send(new builder.Message(session).attachmentLayout(builder.AttachmentLayout.carousel).attachments(cards));
-            utils.triggerFeedbackDialog(session);
             session.endDialog();
+            utils.triggerFeedbackDialog(session);
         } else {
             session.send(i18n.__("no-results"));
             session.replaceDialog('SpesenQuittungDialog')

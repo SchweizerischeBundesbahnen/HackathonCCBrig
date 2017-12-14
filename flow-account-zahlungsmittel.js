@@ -37,9 +37,9 @@ dialogs = [
 
             session.send(reply);
 
-            utils.triggerFeedbackDialog(session);
-
             session.endDialog();
+
+            utils.triggerFeedbackDialog(session);
         } else {
             session.endDialogWithResult({
                 resumed: builder.ResumeReason.notCompleted

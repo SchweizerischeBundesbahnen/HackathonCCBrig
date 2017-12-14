@@ -6,8 +6,12 @@ The best bot ever serving for SBB CC-Brig
 
 var restify = require('restify');
 var builder = require('botbuilder');
+var cognitiveServices = require('botbuilder-cognitiveservices');
+var utils = require('./utils');
 
-var cognitiveservices = require('botbuilder-cognitiveservices');
+// Localisation
+var i18n = require('./localisation');
+
 
 // Setup Restify Server
 var server = restify.createServer();
@@ -15,92 +19,110 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
     console.log('%s listening to %s', server.name, server.url);
 });
 
+
 // Create chat connector for communicating with the Bot Framework Service
 var connector = new builder.ChatConnector({
-    appId: process.env.MicrosoftAppId,
-    appPassword: process.env.MicrosoftAppPassword,
-    stateEndpoint: process.env.BotStateEndpoint,
-    openIdMetadata: process.env.BotOpenIdMetadata
+    appId: process.env.MICROSOFT_APP_ID,
+    appPassword: process.env.MICROSOFT_APP_PASSWORD
 });
 
-// Listen for messages from users 
+// Listen for messages from users (connect the server to the connector)
 server.post('/api/messages', connector.listen());
 
 
-//Storage
-var inMemoryStorage = new builder.MemoryBotStorage();
 
-
-// Create your bot with a function to receive messages from the user
-var bot = new builder.UniversalBot(connector, {
-    localizerSettings: {
-        defaultLocale: "de"
-    }
+// Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
+var bot = new builder.UniversalBot(connector, function (session) {
+    session.endDialog(i18n.__('no-matches'));
 });
+
+
+// Storage of the sessions
+var inMemoryStorage = new builder.MemoryBotStorage();
 bot.set('storage', inMemoryStorage);
 
 
-// Make sure you add code to validate these fields
+// LUIS configuration
 var luisAppId = process.env.LuisAppId;
 var luisAPIKey = process.env.LuisAPIKey;
 var luisAPIHostName = process.env.LuisAPIHostName || 'westeurope.api.cognitive.microsoft.com';
-
-var qnaKnowledgeBaseId = process.env.QnAKnowledgeBaseId;
-var qnaSubscriptionKey = process.env.QnASubscriptionKey;
+var luisRecogniser = new builder.LuisRecognizer('https://' + luisAPIHostName + '/luis/v2.0/apps/' + luisAppId + '?subscription-key=' + luisAPIKey);
 
 
-const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v2.0/apps/' + luisAppId + '?subscription-key=' + luisAPIKey;
 
-// Main dialog with LUIS
-var LuisRecogniser = new builder.LuisRecognizer(LuisModelUrl);
-bot.recognizer(LuisRecogniser);
-
-
-var i18n = require('./localisation');
-
-
-var qnarecognizer = new cognitiveservices.QnAMakerRecognizer({
-    knowledgeBaseId: qnaKnowledgeBaseId,
-    subscriptionKey: qnaSubscriptionKey,
-    top: 4});
-
-var basicQnAMakerDialog = new cognitiveservices.QnAMakerDialog({
-    recognizers: [qnarecognizer],
-    defaultMessage: i18n.__('no-matches'),
-    qnaThreshold: 0.3
+//QnA Maker
+var qnaRecognizer = new cognitiveServices.QnAMakerRecognizer({
+    knowledgeBaseId: process.env.QnAKnowledgeBaseId,
+    subscriptionKey: process.env.QnASubscriptionKey,
+    top: 4
 });
 
 
+// Install a custom recognizer to look for user saying 'help' or 'goodbye'.
+bot.recognizer({
+    recognize: function (context, callback) {
+
+        if(context.dialogData) {
+
+            callback(null, null);
+
+        } else {
+
+            //First attempt: LUIS
+            luisRecogniser.recognize(context, function (error, result) {
+
+                //LUIS answered
+                if (!error && result && result.score >= 0.65) {
+                    callback(null, result); //We send back the intent to the flow
+                } else {
+                    //The threshold is not met, second attempt: QnA
+                    qnaRecognizer.recognize(context, function (error, result) {
+                        if (!error && result && result.score >= 0.50 && result.answers && result.answers.length > 0) {
+                            callback(null, result); //This will end up in the QnA Dialog as an answer
+                        } else {
+                            callback(error, null);
+                        }
+                    });
+                }
+            });
+        }
+    }
+});
 
 //Zahlungsmittel Hinterlegen
 var zahlungsMittelDialogs = require('./flow-account-zahlungsmittel');
-bot.dialog('ZahlungsMittelHinterlegenDialog', zahlungsMittelDialogs).triggerAction({
-    matches: 'Account.Zahlungsmittel-hinterlegen'
-});
+bot.dialog('ZahlungsMittelHinterlegenDialog', zahlungsMittelDialogs)
+    .triggerAction({
+        matches: 'Account.Zahlungsmittel-hinterlegen'
+    })
+    .cancelAction('cancelCreateNote', i18n.__("cancelled"), {
+        matches: /^(fertig|stop|cancel)/i,
+        confirmPrompt: i18n.__("are-you-sure")
+    });
 
 
 //Spesequittung
 var speseQuittungDialogs = require('./flow-account-spesequittung');
 bot.dialog('SpesenQuittungDialog', speseQuittungDialogs)
-.triggerAction({
-    matches: 'Account.Spesenquittung'
-})
-.cancelAction('cancelCreateNote', i18n.__("cancelled"), {
-    matches: /^(fertig|stop|cancel)/i,
-    confirmPrompt: i18n.__("are-you-sure")
-});
+    .triggerAction({
+        matches: 'Account.Spesenquittung'
+    })
+    .cancelAction('cancelCreateNote', i18n.__("cancelled"), {
+        matches: /^(fertig|stop|cancel)/i,
+        confirmPrompt: i18n.__("are-you-sure")
+    });
 
 
 //Account gesperrt
 var accountGesperrtDialogs = require('./flow-account-gesperrt');
 bot.dialog('KontoGesperrtDialog', accountGesperrtDialogs)
-.triggerAction({
-    matches: 'Account.Gesperrt'
-})
-.cancelAction('cancelCreateNote', i18n.__("cancelled"), {
-    matches: /^(fertig|stop|cancel)/i,
-    confirmPrompt: i18n.__("are-you-sure")
-});
+    .triggerAction({
+        matches: 'Account.Gesperrt'
+    })
+    .cancelAction('cancelCreateNote', i18n.__("cancelled"), {
+        matches: /^(fertig|stop|cancel)/i,
+        confirmPrompt: i18n.__("are-you-sure")
+    });
 
 //Leave feedback
 var feedbackDialogs = require('./flow-account-feedback');
@@ -109,16 +131,35 @@ bot.dialog('FeedbackDialog', feedbackDialogs);
 //Hello
 var greetingsHelloDialogs = require('./flow-greetings-hello');
 bot.dialog('HelloDialog', greetingsHelloDialogs)
-.triggerAction({
-    matches: 'Greetings.Hello'
-});
+    .triggerAction({
+        matches: 'Greetings.Hello'
+    });
 
 //Bye
 var greetingsByeDialogs = require('./flow-greetings-bye');
 bot.dialog('ByeDialog', greetingsByeDialogs)
-.triggerAction({
-    matches: 'Greetings.Bye'
+    .triggerAction({
+        matches: 'Greetings.Bye'
+    });
+
+
+//I didn't get that, redirect to QnA Maker
+bot.dialog('QnAMakerDialog', function (session, args) {
+    session.send(args.intent.answers[0].answer);
+    session.endDialog();
+    utils.triggerFeedbackDialog(session);
+}).triggerAction({
+    matches: 'qna'
 });
+
+
+let securityModule = require('./flow-prompt-security');
+bot.dialog('AuthMethodPrompt', securityModule.authMethodDialogs);
+bot.dialog('SwissPassCardNumberPrompt', securityModule.swissPassDialogs);
+bot.dialog('VideoIdentPrompt', securityModule.videoIdentDialogs);
+bot.dialog('AlternativeIdentPrompt', securityModule.alternativeIdentDialogs);
+
+
 
 
 // //SmallTalk
@@ -134,15 +175,3 @@ bot.dialog('ByeDialog', greetingsByeDialogs)
 // bot.dialog('HelpDialog', helpDialogs).triggerAction({
 //     matches: 'Help'
 // });
-
-
-//I didn't get that, redirect to QnA Maker
-bot.dialog('/', basicQnAMakerDialog);
-
-
-let securityModule = require('./flow-prompt-security');
-bot.dialog('AuthMethodPrompt', securityModule.authMethodDialogs);
-bot.dialog('SwissPassCardNumberPrompt', securityModule.swissPassDialogs);
-bot.dialog('VideoIdentPrompt', securityModule.videoIdentDialogs);
-bot.dialog('AlternativeIdentPrompt', securityModule.alternativeIdentDialogs);
-

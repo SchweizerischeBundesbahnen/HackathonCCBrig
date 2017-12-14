@@ -14,9 +14,7 @@ function sendInternetUrl(session, url, text, contentType, attachmentFileName) {
 }
 
 function triggerFeedbackDialog(session) {
-    setTimeout(function() {
-        session.beginDialog('FeedbackDialog')
-    }, 3000);
+    setTimeout(function() { session.beginDialog('FeedbackDialog')}, 3000);
 }
 
 
