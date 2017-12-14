@@ -4,22 +4,31 @@ var utils = require('./utils');
 
 dialogs = [
 
-    function (session, args) {
-        session.beginDialog("SwissPassCardNumberPrompt");
+    function (session, args, next) {
+        if(args && !args.reprompt) {
+            session.beginDialog("SwissPassCardNumberPrompt");
+        } else {
+            next({reprompt: args.reprompt});
+        }
     },
 
-    function (session, args, next) {
-        builder.Prompts.text(session, i18n.__("email-address"));
+    function (session, args) {
+        if(args && args.reprompt) {
+            builder.Prompts.text(session, i18n.__('email-address-retry'));
+        } else {
+            builder.Prompts.text(session, i18n.__('email-address'));
+        }
     },
 
     function (session, args, next) {
 
         var securityContext = session.conversationData.securityContext;
 
-        if (args.response && args.response === securityContext.emailAddress) {
+        if (args.response && args.response.toLowerCase() === securityContext.emailAddress) {
             next();
         } else {
-            session.endConversation(i18n.__("auth-error"));
+            //session.endConversation(i18n.__("auth-error"));
+            session.replaceDialog('KontoGesperrtDialog', {reprompt: true});
         }
 
     },

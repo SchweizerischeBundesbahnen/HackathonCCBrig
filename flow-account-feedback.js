@@ -21,7 +21,7 @@ dialogs = [
 
         if (session.dialogData.medium) {
 
-            if(session.dialogData.medium === 'Ja') {
+            if(session.dialogData.medium === i18n.__('yes')) {
                 session.send(i18n.__('thank-you'));
                 session.send(i18n.__('can-i-help-you-more'));
             } else {

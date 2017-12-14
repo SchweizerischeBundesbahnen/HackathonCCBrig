@@ -1,22 +1,32 @@
 var customers = {
     '111-222-333-1': {
-        name: 'Hans Huggentobler',
+        firstName: 'Hans',
+        lastName: 'Huggentobler',
+        birthday: '1948-12-03',
         email: 'hans@example.com'
     },
     '111-222-333-2': {
-        name: 'Markus Müller',
+        firstName: 'Markus',
+        lastName: 'Müller',
+        birthday: '1970-04-12',
         email: 'markus@example.com'
     },
     '111-222-333-3': {
-        name: 'Bernhard Knüsel',
+        firstName: 'Bernhard',
+        lastName: 'Knüsel',
+        birthday: '1978-06-10',
         email: 'bernhard@example.com'
     },
     '111-222-333-4': {
-        name: 'Daniela Huber',
+        firstName: 'Daniela',
+        lastName: 'Huber',
+        birthday: '1985-10-07',
         email: 'daniela@example.com'
     },
     '111-222-333-5': {
-        name: 'Samantha Fischer',
+        firstName: 'Samantha',
+        lastName: 'Fischer',
+        birthday: '1990-02-15',
         email: 'samantha@example.com'
     },
 };

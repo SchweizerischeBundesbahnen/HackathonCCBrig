@@ -3,6 +3,7 @@ var i18n = require('./localisation');
 var utils = require('./utils');
 var customers = require('./data').customers;
 var azure = require('azure-storage');
+var dateFormat = require('dateformat');
 
 var detectUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false';
 var verifyUrl = 'https://westeurope.api.cognitive.microsoft.com/face/v1.0/verify';
@@ -11,7 +12,7 @@ var cognitiveVisionKey = process.env.CognitiveVisionKey;
 var request = require('request').defaults({encoding: null});
 
 
-dialogs = [
+swissPassDialogs = [
 
     function (session, args) {
 
@@ -51,8 +52,7 @@ dialogs = [
             if (customers[number] != null) {
                 securityContext.swissPassCardNumber = number;
                 securityContext.emailAddress = customers[number].email;
-                securityContext.name = customers[number].name;
-                next();
+                session.replaceDialog('AuthMethodPrompt');
             } else {
                 session.endConversation(i18n.__("auth-error"));
             }
@@ -62,6 +62,43 @@ dialogs = [
         }
     },
 
+];
+
+
+
+authMethodDialogs = [
+
+    function (session, args, next) {
+
+        builder.Prompts.choice(session, i18n.__('authentication-method'), [i18n.__('video-ident'), i18n.__('additional-questions')], { listStyle: builder.ListStyle.button });
+
+    },
+
+
+    function (session, args, next) {
+
+        var securityContext = session.conversationData.securityContext;
+
+        if(args.response) {
+
+            if(args.response.entity === i18n.__('video-ident')) {
+                session.replaceDialog('VideoIdentPrompt');
+            } else {
+                session.replaceDialog('AlternativeIdentPrompt');
+            }
+
+        } else {
+            session.endConversation(i18n.__("auth-error"));
+        }
+
+    },
+
+];
+
+
+
+
+videoIdentDialogs = [
 
     function (session, args, next) {
 
@@ -78,8 +115,9 @@ dialogs = [
             if (!faceFound) {
                 session.endConversation(i18n.__("no-face-found"));
             } else if (isIdentical) {
-                session.conversationData.securityContext.authenticated = true;
-                session.send(i18n.__('successfully-authenticated', {name: securityContext.name}));
+                let customer = customers[securityContext.swissPassCardNumber];
+                securityContext.authenticated = true;
+                session.send(i18n.__('successfully-authenticated', {name: customer.firstName + ' ' + customer.lastName}));
                 session.endDialog();
             } else {
                 session.endConversation(i18n.__("auth-error"));
@@ -87,9 +125,118 @@ dialogs = [
         })
 
     }
+];
 
+
+
+alternativeIdentDialogs = [
+
+
+
+    function (session, args, next) {
+
+        if (!session.dialogData.authData) {
+            session.dialogData.authData = {
+                firstName: null,
+                lastName: null,
+                birthday: null
+            }
+        }
+
+        builder.Prompts.text(session, i18n.__("first-name"));
+    },
+
+
+    function (session, args, next) {
+
+        var authData = session.dialogData.authData;
+
+        if(args.response) {
+            authData.firstName = args.response;
+            next();
+        } else {
+            session.endConversation(i18n.__("auth-error"));
+        }
+
+    },
+
+
+    function (session, args, next) {
+
+        builder.Prompts.text(session, i18n.__("last-name"));
+
+    },
+
+    function (session, args, next) {
+
+        var authData = session.dialogData.authData;
+
+        if(args.response) {
+            authData.lastName = args.response;
+            next();
+        } else {
+            session.endConversation(i18n.__("auth-error"));
+        }
+
+    },
+
+
+    function (session, args, next) {
+
+        builder.Prompts.time(session, i18n.__("birthday"));
+
+    },
+
+    function (session, args, next) {
+
+        var authData = session.dialogData.authData;
+
+        if(args.response) {
+            authData.birthday = builder.EntityRecognizer.resolveTime([args.response]);
+            next();
+        } else {
+            session.endConversation(i18n.__("auth-error"));
+        }
+
+    },
+
+    function (session, args, next) {
+
+        var securityContext = session.conversationData.securityContext;
+        var authData = session.dialogData.authData;
+
+        if(authData.firstName && authData.lastName && authData.birthday) {
+
+            var birthday = dateFormat(new Date(authData.birthday), "yyyy-mm-dd");
+            let customer = customers[securityContext.swissPassCardNumber];
+
+            if(customer.firstName.toLowerCase() === authData.firstName.toLowerCase() && customer.lastName.toLowerCase() === authData.lastName.toLowerCase() && customer.birthday === birthday) {
+                securityContext.authenticated = true;
+                session.send(i18n.__('successfully-authenticated', {name: customer.firstName + ' ' + customer.lastName}));
+                session.endDialog();
+            } else {
+                session.endConversation(i18n.__("auth-error"));
+            }
+
+        } else {
+            session.endConversation(i18n.__("auth-error"));
+        }
+
+    },
 
 ];
+
+
+
+module.exports.swissPassDialogs = swissPassDialogs;
+module.exports.authMethodDialogs = authMethodDialogs;
+module.exports.videoIdentDialogs = videoIdentDialogs;
+module.exports.alternativeIdentDialogs = alternativeIdentDialogs;
+
+
+
+
+
 
 
 function faceDetectionOnBlob(blobSvc, container, blob, callback) {
@@ -207,6 +354,3 @@ function faceRecognition(session, swissPassCardNumber, callback) {
         });
     });
 }
-
-
-module.exports = dialogs;

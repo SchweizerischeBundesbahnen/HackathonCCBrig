@@ -49,8 +49,29 @@
   "swisspass-id-explanation": {
     "de": "Sie finden ihre SwissPass-Nr auf der Vorderseite ihrer Karte. \nDie Nummer hat das folgende Format: XXX-XXX-XXX-X"
   },
+  "authentication-method": {
+    "de": "Wie möchten Sie sich Autentifizieren?"
+  },
+  "video-ident": {
+    "de": "mit Foto"
+  },
+  "additional-questions": {
+    "de": "mit einigen zusätzlichen Fragen"
+  },
   "email-address": {
     "de": "Wie lautet ihre E-Mailadresse?"
+  },
+  "email-address-retry": {
+    "de": "Ich habe keine E-Mailadresse erkannt, können Sie mir die Adresse nochmals geben?"
+  },
+  "first-name": {
+    "de": "Können Sie mir bitte Ihren Vornamen geben?"
+  },
+  "last-name": {
+    "de": "Geben sie mir bitte Ihren Nachnamen durch"
+  },
+  "birthday": {
+    "de": "Bitte geben Sie mir Ihr Geburtsdatum an"
   },
   "take-a-selfie": {
     "de": "Bitte machen sie ein Bild von sich (Selfie)."
@@ -58,7 +79,6 @@
   "successfully-authenticated": {
     "de": "Hallo {{name}}, ihre Identifikation hat geklappt!"
   },
-
   "account-reactivated": {
     "de": "Ok, ich habe ihren Account entsperrt. Ich habe ihnen ein E-Mail mit Instruktionen für die Zurücksetzung ihres Passworts an {{email}} geschickt."
   },

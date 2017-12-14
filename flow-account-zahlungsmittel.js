@@ -23,7 +23,7 @@ dialogs = [
         if (session.dialogData.medium) {
 
             var cards = null;
-            if(session.dialogData.medium === 'auf dem Desktopcomputer/Notebook (WebShop)') {
+            if(session.dialogData.medium === i18n.__('desktop')) {
                 cards = getCardsWebDesktop(session);
             } else {
                 session.send(i18n.__('zahlungsmittel-video.mobile.intro'));

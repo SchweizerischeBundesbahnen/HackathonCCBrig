@@ -32,7 +32,11 @@ var inMemoryStorage = new builder.MemoryBotStorage();
 
 
 // Create your bot with a function to receive messages from the user
-var bot = new builder.UniversalBot(connector);
+var bot = new builder.UniversalBot(connector, {
+    localizerSettings: {
+        defaultLocale: "de"
+    }
+});
 bot.set('storage', inMemoryStorage);
 
 
@@ -91,8 +95,7 @@ bot.dialog('SpesenQuittungDialog', speseQuittungDialogs)
 var accountGesperrtDialogs = require('./flow-account-gesperrt');
 bot.dialog('KontoGesperrtDialog', accountGesperrtDialogs)
 .triggerAction({
-    matches: 'Account.Gesperrt',
-    score: 0.8
+    matches: 'Account.Gesperrt'
 })
 .cancelAction('cancelCreateNote', i18n.__("cancelled"), {
     matches: /^(fertig|stop|cancel)/i,
@@ -137,6 +140,9 @@ bot.dialog('ByeDialog', greetingsByeDialogs)
 bot.dialog('/', basicQnAMakerDialog);
 
 
-var swissPassCardNumberDialogs = require('./flow-prompt-swisspass');
-bot.dialog('SwissPassCardNumberPrompt', swissPassCardNumberDialogs);
+let securityModule = require('./flow-prompt-security');
+bot.dialog('AuthMethodPrompt', securityModule.authMethodDialogs);
+bot.dialog('SwissPassCardNumberPrompt', securityModule.swissPassDialogs);
+bot.dialog('VideoIdentPrompt', securityModule.videoIdentDialogs);
+bot.dialog('AlternativeIdentPrompt', securityModule.alternativeIdentDialogs);
 
