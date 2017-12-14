@@ -192,7 +192,7 @@ alternativeIdentDialogs = [
         var authData = session.dialogData.authData;
 
         if(args.response) {
-            authData.birthday = builder.EntityRecognizer.resolveTime([args.response]);
+            authData.birthday = args.response.entity;
             next();
         } else {
             session.endConversation(i18n.__("auth-error"));
@@ -207,7 +207,8 @@ alternativeIdentDialogs = [
 
         if(authData.firstName && authData.lastName && authData.birthday) {
 
-            var birthday = dateFormat(new Date(authData.birthday), "yyyy-mm-dd");
+            var from = authData.birthday.split(".");
+            var birthday = dateFormat(new Date(from[2], from[1] - 1, from[0]), "yyyy-mm-dd");
             let customer = customers[securityContext.swissPassCardNumber];
 
             if(customer.firstName.toLowerCase() === authData.firstName.toLowerCase() && customer.lastName.toLowerCase() === authData.lastName.toLowerCase() && customer.birthday === birthday) {
