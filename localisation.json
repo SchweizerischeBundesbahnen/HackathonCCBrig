@@ -10,15 +10,15 @@
 
 
   "no-matches": {
-    "de": "Ich verstehe sie leider nicht.\nIch bin immer noch am lernen. Was ich aktuell kann ist: Account entsperren, Zahlungsmittel hinterlegen und Spesenquittungen suchen."
+    "de": "Ich hab Sie leider nicht verstanden.\nIch bin noch jung und fleissig am lernen. Aktuell kann ich Ihnen helfen bei\n* Entsperren von Accounts\n* Hinterlegen von Zahlungsmitteln\n* Suchen von Spesenquittungen."
   },
 
 
   "are-you-sure": {
-    "de": "Sind sie sich sicher?"
+    "de": "Sind Sie sich sicher?"
   },
   "cancelled": {
-    "de": "Ich habe ihre Anfrage abgebrochen."
+    "de": "Ich habe Ihre Anfrage abgebrochen."
   },
 
 
@@ -26,31 +26,31 @@
     "de": "Hallo, ich bin CONDI."
   },
   "bot-introduction": {
-    "de": "Hallo, mein Name ist CONDI. Ich bin der Chatbot des Contact Center Brig und kann ihnen in folgenden Belangen helfen.\nAccount entsperren, Zahlungsmittel hinterlegen und Spesenquittungen suchen.\n\nIch bin noch ziemlich jung und muss noch viel lernen. Wie kann ich ihnen heute helfen?"
+    "de": "Hallo, mein Name ist CONDI. Ich bin der Chatbot des Contact Center Brig und kann Ihnen in folgenden Belangen helfen.\nAccount entsperren, Zahlungsmittel hinterlegen und Spesenquittungen suchen.\n\nIch bin noch ziemlich jung und muss noch viel lernen. Wie kann ich Ihnen behilflich sein?"
   },
 
 
 
   "auth-error": {
-    "de": "Ich konnte sie mit den gemachten Angaben leider nicht identifizieren. Bitte rufen sie unser Contact Center an, da haben wir kompetente Leute, die ihnen sehr gerne weiterhelfen."
+    "de": "Ich konnte Sie mit den Angaben leider nicht identifizieren. Ich kann Sie mit einem Mitarbeitenden des SBB Contact Center verbinden, welcher Ihnen gerne weiterhelfen kann. Als Alternative können Sie uns eine E-Mail an folgende Adresse zuschicken: contactcenter@sbb"
   },
   "auth-success": {
-    "de": "In dem Fall sind sie #{{userFullName}}?"
+    "de": "In dem Fall sind Sie #{{userFullName}}?"
   },
   "auth-necessary": {
-    "de": "Damit ich ihnen weiterhelfen kann, benötige ich ein paar Informationen von ihnen, damit ich sie identifizieren kann."
+    "de": "Damit ich Ihnen weiterhelfen kann, benötige ich zur Identifizierung noch ein paar Informationen von Ihnen."
   },
   "no-face-found": {
     "de": "Es wurde kein Gesicht auf dem Bild erkannt."
   },
   "swisspass-id": {
-    "de": "Könnten sie mir bitte ihre SwissPass-Nr geben?"
+    "de": "Könnten Sie mir bitte ihre SwissPass-Nr geben?"
   },
   "swisspass-id-explanation": {
-    "de": "Sie finden ihre SwissPass-Nr auf der Vorderseite ihrer Karte. \nDie Nummer hat das folgende Format: XXX-XXX-XXX-X"
+    "de": "Sie finden Ihre SwissPass-Nr auf der Vorderseite ihrer Karte. \nDie Nummer hat das folgendes Format: XXX-XXX-XXX-X"
   },
   "authentication-method": {
-    "de": "Wie möchten Sie sich Autentifizieren?"
+    "de": "Wie möchten Sie sich identifizieren?"
   },
   "video-ident": {
     "de": "mit Foto"
@@ -62,33 +62,33 @@
     "de": "Wie lautet ihre E-Mailadresse?"
   },
   "email-address-retry": {
-    "de": "Ich habe keine E-Mailadresse erkannt, können Sie mir die Adresse nochmals geben?"
+    "de": "Ich habe keine E-Mailadresse erkannt oder ich hab die E-Mailadresse nicht gefunden. Können Sie mir Ihre E-Mail-Adresse nochmals geben?"
   },
   "first-name": {
     "de": "Können Sie mir bitte Ihren Vornamen geben?"
   },
   "last-name": {
-    "de": "Geben sie mir bitte Ihren Nachnamen durch"
+    "de": "Können Sie mir bitte Ihren Nachnamen geben?"
   },
   "birthday": {
-    "de": "Bitte geben Sie mir Ihr Geburtsdatum an"
+    "de": "Können Sie mir bitte Ihr Geburtsdatum angeben? (xx.yy.zzzz)"
   },
   "take-a-selfie": {
-    "de": "Bitte machen sie ein Bild von sich (Selfie)."
+    "de": "Bitte machen Sie ein Bild von sich (Selfie)."
   },
   "successfully-authenticated": {
     "de": "Hallo {{name}}, ihre Identifikation hat geklappt!"
   },
   "account-reactivated": {
-    "de": "Ok, ich habe ihren Account entsperrt. Ich habe ihnen ein E-Mail mit Instruktionen für die Zurücksetzung ihres Passworts an {{email}} geschickt."
+    "de": "Ok, ich konnte Ihren Account erfolgreich entsperren. Ich habe Ihnen eine E-Mail mit Instruktionen für die Zurücksetzung ihres Passworts an die Adresse {{email}} geschickt."
   },
 
 
   "travel-date": {
-    "de": "Von welchem Datum möchten sie die Quittung?"
+    "de": "Von welchem Datum möchten Sie die Quittung?"
   },
   "searching-receipts": {
-    "de": "Ich suche nach ihren Quittungen für das folgende Datum {{date}} und den SwissPass {{card}}"
+    "de": "Ich suche nach Ihren Quittungen für das Datum {{date}} und den SwissPass {{card}}"
   },
   "download": {
     "de": "Quittung herunterladen"
@@ -100,14 +100,14 @@
     "de": "Bestellnummer #{{text}}"
   },
   "no-results": {
-    "de": "Keine Quittung gefunden, bitte wählen sie ein anderes Reisedatum."
+    "de": "Leider habe ich keine Quittung gefunden für dieses Datum. Bitte wählen Sie ein anderes Reisedatum."
   },
 
 
 
 
   "medium-selection": {
-    "de": "Auf welchem Gerät möchten sie die Einstellung vornehmen?"
+    "de": "Auf welchem Gerät möchten Sie die Einstellung vornehmen?"
   },
   "desktop": {
     "de": "auf dem Desktopcomputer/Notebook (WebShop)"
@@ -134,21 +134,21 @@
     "de": "Kreditkarte"
   },
   "zahlungsmittel-hinlegen.desktop.text": {
-    "de": "Wählen Sie den Kreditkartentyp und tragen sie die notwendigen Informationen ein"
+    "de": "Wählen Sie den Kreditkartentyp und tragen Sie die notwendigen Informationen ein"
   },
   "zahlungsmittel-video.mobile.intro": {
-    "de": "Als Hilfestellung kannst du dir diesen Kurzfilm ansehen."
+    "de": "Als Hilfestellung können Sie sich diesen Kurzfilm ansehen."
   },
   "zahlungsmittel-video.mobile.title": {
     "de": "Zahlungsmittel"
   },
   "zahlungsmittel-video.mobile.text": {
-    "de": "Hiermit können Sie einen Zahlungsmittel im SBB-App hinzufügen"
+    "de": "Auf diese Art können Sie in der SBB Mobile App ein Zahlungsmittel hinterlegen."
   },
 
 
   "feedback-question": {
-    "de": "Konnte ich ihr Problem lösen?"
+    "de": "Konnte ich Ihr Problem lösen?"
   },
   "yes": {
     "de": "Ja"
@@ -160,13 +160,13 @@
     "de": "Vielen Dank!"
   },
   "can-i-help-you-more": {
-    "de": "Kann ich ihnen mit etwas anderem helfen?"
+    "de": "Haben Sie noch weitere Anliegen?"
   },
   "text-no-1": {
-    "de": "Es tut mir leid, dass ich leider keine Antwort gefunden habe. Wie bereits gesagt, ich lerne noch fleissig."
+    "de": "Leider hab ich keine Antwort auf Ihre Anfrage gefunden. Wie bereits erwähnt, bin ich noch fleissig am lernen."
   },
   "text-no-2": {
-    "de": "Bitte rufen sie unser Contact Center unter [0900 300 300](tel:+41900300300) an."
+    "de": "Ich kann Sie mit einem Mitarbeitenden des SBB Contact Center verbinden, welcher Ihnen gerne weiterhelfen kann. Als Alternative können Sie uns eine E-Mail an folgende Adresse zuschicken: contactcenter@sbb."
   }
 
 }
