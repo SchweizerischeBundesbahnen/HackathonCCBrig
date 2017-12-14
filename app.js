@@ -22,8 +22,10 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
 
 // Create chat connector for communicating with the Bot Framework Service
 var connector = new builder.ChatConnector({
-    appId: process.env.MICROSOFT_APP_ID,
-    appPassword: process.env.MICROSOFT_APP_PASSWORD
+    appId: process.env.MicrosoftAppId,
+    appPassword: process.env.MicrosoftAppPassword,
+    stateEndpoint: process.env.BotStateEndpoint,
+    openIdMetadata: process.env.BotOpenIdMetadata
 });
 
 // Listen for messages from users (connect the server to the connector)
@@ -124,10 +126,6 @@ bot.dialog('KontoGesperrtDialog', accountGesperrtDialogs)
         confirmPrompt: i18n.__("are-you-sure")
     });
 
-//Leave feedback
-var feedbackDialogs = require('./flow-account-feedback');
-bot.dialog('FeedbackDialog', feedbackDialogs);
-
 //Hello
 var greetingsHelloDialogs = require('./flow-greetings-hello');
 bot.dialog('HelloDialog', greetingsHelloDialogs)
@@ -141,6 +139,11 @@ bot.dialog('ByeDialog', greetingsByeDialogs)
     .triggerAction({
         matches: 'Greetings.Bye'
     });
+
+
+//Leave feedback
+var feedbackDialogs = require('./flow-account-feedback');
+bot.dialog('FeedbackDialog', feedbackDialogs);
 
 
 //I didn't get that, redirect to QnA Maker
@@ -169,9 +172,3 @@ bot.dialog('AlternativeIdentPrompt', securityModule.alternativeIdentDialogs);
 //     matches: 'Greetings.SmallTalk'
 // });
 
-
-// //Help
-// var helpDialogs = require('./flow-help');
-// bot.dialog('HelpDialog', helpDialogs).triggerAction({
-//     matches: 'Help'
-// });
