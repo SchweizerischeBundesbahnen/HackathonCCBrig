@@ -79,7 +79,7 @@ bot.recognizer({
                 } else {
                     //The threshold is not met, second attempt: QnA
                     qnaRecognizer.recognize(context, function (error, result) {
-                        if (!error && result && result.score >= 0.50 && result.answers && result.answers.length > 0) {
+                        if (!error && result && result.score >= 0.25 && result.answers && result.answers.length > 0) {
                             callback(null, result); //This will end up in the QnA Dialog as an answer
                         } else {
                             callback(error, null);
