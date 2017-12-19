@@ -71,7 +71,7 @@
     "de": "Können Sie mir bitte Ihren Nachnamen geben?"
   },
   "birthday": {
-    "de": "Können Sie mir bitte Ihr Geburtsdatum angeben? (xx.yy.zzzz)"
+    "de": "Können Sie mir bitte Ihr Geburtsdatum angeben? (tt.mm.jjjj)"
   },
   "take-a-selfie": {
     "de": "Bitte machen Sie ein Bild von sich (Selfie)."
@@ -85,7 +85,7 @@
 
 
   "travel-date": {
-    "de": "Von welchem Datum möchten Sie die Quittung?"
+    "de": "Von welchem Datum möchten Sie die Quittung? (tt.mm.jjjj)"
   },
   "searching-receipts": {
     "de": "Ich suche nach Ihren Quittungen für das Datum {{date}} und den SwissPass {{card}}"

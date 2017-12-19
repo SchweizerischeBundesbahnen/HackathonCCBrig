@@ -105,7 +105,7 @@ bot.dialog('ZahlungsMittelHinterlegenDialog', zahlungsMittelDialogs)
 
 //Spesequittung
 var speseQuittungDialogs = require('./flow-account-spesequittung');
-bot.dialog('SpesenQuittungDialog', speseQuittungDialogs)
+bot.dialog('SpesenQuittungDialog', speseQuittungDialogs.normalFlow)
     .triggerAction({
         matches: 'Account.Spesenquittung'
     })

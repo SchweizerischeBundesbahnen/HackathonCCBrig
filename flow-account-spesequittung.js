@@ -10,32 +10,48 @@ dialogs = [
         session.beginDialog("SwissPassCardNumberPrompt");
     },
 
-    function (session, args) {
+    function (session, args, next) {
 
         //Initialise the data
-        if(!session.dialogData.travelInfo) {
-            session.dialogData.travelInfo = {
+        if(!session.conversationData.travelInfo) {
+            session.conversationData.travelInfo = {
                 travelDate: null,
                 travelFrom: null,
                 travelTo:   null
             }
         }
 
-        //Travel time
-        builder.Prompts.time(session, i18n.__("travel-date"));
+        next();
+    },
+
+
+    function (session, args) {
+
+        builder.Prompts.text(session, i18n.__("travel-date"));
+
+    },
+
+    function (session, args, next) {
+
+        var travelInfo = session.conversationData.travelInfo;
+        var date_regex = /^\d{2}\.\d{2}\.\d{4}$/;
+
+        if (date_regex.test(args.response)) {
+            var from = args.response.split(".");
+            travelInfo.travelDate = new Date(from[2], from[1] - 1, from[0]);
+            next();
+        } else {
+            session.endDialog(i18n.__("invalid-input"));
+        }
+
     },
 
     function (session, args, next) {
 
         var securityContext = session.conversationData.securityContext;
-        var travelInfo = session.dialogData.travelInfo;
+        var travelInfo = session.conversationData.travelInfo;
 
-        if(args.response) {
-            travelInfo.travelDate = builder.EntityRecognizer.resolveTime([args.response]);
-        }
-
-        var date = new Date(travelInfo.travelDate);
-        session.send(i18n.__("searching-receipts", {date: dateFormat(date, "dddd, mmmm dS, yyyy"), card: securityContext.swissPassCardNumber}));
+        session.send(i18n.__("searching-receipts", {date: dateFormat(travelInfo.travelDate, "dddd, mmmm dS, yyyy"), card: securityContext.swissPassCardNumber}));
 
         next();
     },
@@ -62,7 +78,7 @@ dialogs = [
 function getQuittungenCarousel(session) {
 
     var securityContext = session.conversationData.securityContext;
-    var travelInfo = session.dialogData.travelInfo;
+    var travelInfo = session.conversationData.travelInfo;
     var date = dateFormat(new Date(travelInfo.travelDate), "yyyy-mm-dd");
 
     var cards = [];
@@ -89,4 +105,4 @@ function getQuittungenCarousel(session) {
 }
 
 
-module.exports = dialogs;
+module.exports.normalFlow = dialogs;

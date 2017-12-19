@@ -135,8 +135,8 @@ alternativeIdentDialogs = [
 
     function (session, args, next) {
 
-        if (!session.dialogData.authData) {
-            session.dialogData.authData = {
+        if (!session.conversationData.authData) {
+            session.conversationData.authData = {
                 firstName: null,
                 lastName: null,
                 birthday: null
@@ -149,7 +149,7 @@ alternativeIdentDialogs = [
 
     function (session, args, next) {
 
-        var authData = session.dialogData.authData;
+        var authData = session.conversationData.authData;
 
         if(args.response) {
             authData.firstName = args.response;
@@ -169,7 +169,7 @@ alternativeIdentDialogs = [
 
     function (session, args, next) {
 
-        var authData = session.dialogData.authData;
+        var authData = session.conversationData.authData;
 
         if(args.response) {
             authData.lastName = args.response;
@@ -181,18 +181,21 @@ alternativeIdentDialogs = [
     },
 
 
-    function (session, args, next) {
+    function (session, args) {
 
-        builder.Prompts.time(session, i18n.__("birthday"));
+        builder.Prompts.text(session, i18n.__("birthday"));
 
     },
 
     function (session, args, next) {
 
-        var authData = session.dialogData.authData;
+        var authData = session.conversationData.authData;
 
-        if(args.response) {
-            authData.birthday = args.response.entity;
+        var date_regex = /^\d{2}\.\d{2}\.\d{4}$/;
+
+        if (date_regex.test(args.response)) {
+            var from = args.response.split(".");
+            authData.birthday = new Date(from[2], from[1] - 1, from[0]);
             next();
         } else {
             session.endConversation(i18n.__("auth-error"));
@@ -203,12 +206,11 @@ alternativeIdentDialogs = [
     function (session, args, next) {
 
         var securityContext = session.conversationData.securityContext;
-        var authData = session.dialogData.authData;
+        var authData = session.conversationData.authData;
 
         if(authData.firstName && authData.lastName && authData.birthday) {
 
-            var from = authData.birthday.split(".");
-            var birthday = dateFormat(new Date(from[2], from[1] - 1, from[0]), "yyyy-mm-dd");
+            var birthday = dateFormat(authData.birthday, "yyyy-mm-dd");
             let customer = customers[securityContext.swissPassCardNumber];
 
             if(customer.firstName.toLowerCase() === authData.firstName.toLowerCase() && customer.lastName.toLowerCase() === authData.lastName.toLowerCase() && customer.birthday === birthday) {
